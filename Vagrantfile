@@ -139,6 +139,8 @@ Vagrant.configure("2") do |config|
             :libvirt__tunnel_port => "#{ 9054 + offset }",
             :libvirt__iface_name => 'eth1',
             auto_config: false
+    
+    config.vm.network "forwarded_port", guest: 32666, host: 32666	
 
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false

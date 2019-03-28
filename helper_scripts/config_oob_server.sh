@@ -381,5 +381,3 @@ sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 echo "############################################"
 echo "      DONE!"
 echo "############################################"
-ETH0_ADDR=`ifconfig eth0 | grep 10\.255 | cut -d ' ' -f 12 | cut -d ':' -f 2`
-echo "sudo iptables -t nat -A PREROUTING -i bond0 -p tcp --dport XXXX -j DNAT --to-destination $ETH0_ADDR:32666"
