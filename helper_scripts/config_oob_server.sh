@@ -331,6 +331,32 @@ if [ "\$?" == "0" ]; then
   apt-get update -qy
   apt-get install ntpdate -qy
 fi
+
+echo " " >/etc/network/interfaces
+echo "auto lo" >>/etc/network/interfaces
+echo "iface lo inet loopback" >>/etc/network/interfaces
+echo "" >>/etc/network/interfaces
+echo "auto eth0" >>/etc/network/interfaces
+echo "iface eth0 inet dhcp" >>/etc/network/interfaces
+echo "    vrf mgmt" >>/etc/network/interfaces
+echo "" >>/etc/network/interfaces
+echo "auto mgmt" >>/etc/network/interfaces
+echo "iface mgmt" >>/etc/network/interfaces
+echo "    address 127.0.0.1/8" >>/etc/network/interfaces
+echo "    vrf-table auto" >>/etc/network/interfaces
+
+echo " " >/etc/netq/netq.yml
+echo "netq-agent:" >>/etc/netq/netq.yml
+echo "  port: 31980" >>/etc/netq/netq.yml
+echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
+echo "  vrf: mgmt" >>/etc/netq/netq.yml
+echo "netq-cli:" >>/etc/netq/netq.yml
+echo "  port: 32708" >>/etc/netq/netq.yml
+echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
+echo "  vrf: mgmt" >>/etc/netq/netq.yml
+
+systemctl enable netqd
+
 nohup bash -c 'sleep 2; shutdown now -r "Rebooting to Complete ZTP"' &
 exit 0
 #CUMULUS-AUTOPROVISIONING

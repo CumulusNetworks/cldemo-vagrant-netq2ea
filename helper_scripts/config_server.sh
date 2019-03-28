@@ -76,6 +76,11 @@ EOT
 sudo systemctl enable ntp.service
 sudo systemctl start ntp.service
 
+netq config add agent server 192.168.0.254
+netq config add cli server 192.168.0.254
+netq config restart agent
+netq config restart cli
+
 echo "#################################"
 echo "   Finished"
 echo "#################################"
