@@ -3,9 +3,8 @@
 echo "################################################"
 echo "  Running Management Server Setup (config_oob_server.sh)..."
 echo "################################################"
-echo -e "\n This script was written for CumulusCommunity/vx_oob_server"
+echo -e "\n This script was originally written for CumulusCommunity/vx_oob_server and now slightly modified to deploy Netq2.x"
 echo " Detected vagrant user is: $username"
-
 echo " ### Overwriting /etc/network/interfaces ###"
 cat <<EOT > /etc/network/interfaces
 auto lo
@@ -22,6 +21,26 @@ iface eth1
 
 EOT
 
+sudo ifup eth1
+
+echo " ### Adding Repos ###"
+sudo sh -c 'echo "deb http://deb.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list'
+sudo sh -c 'echo "deb-src http://deb.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
+sudo sh -c 'echo "deb http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
+sudo sh -c 'echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
+sudo sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list.d/jessie.list'
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+
+sudo apt-get update
+
+echo " ### Install Ansible ###"
+sudo apt-get install -yq git python-netaddr sshpass
+sudo apt-get install -yq -t trusty ansible
+
+echo " ### Install Apache ###"
+sudo apt-get install -yq apache2
+
+echo " ### Write /etc/ntp.conf ###"
 cat << EOT > /etc/ntp.conf
 # /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
 
@@ -49,6 +68,26 @@ restrict ::1
 # Specify interfaces, don't listen on switch ports
 interface listen eth1
 EOT
+
+
+
+
+echo " ### Pushing Ansible Configuration ###"
+cat << EOT > /etc/ansible/ansible.cfg
+[defaults]
+library = /usr/share/ansible
+host_key_checking=False
+callback_whitelist = profile_tasks
+retry_files_enabled = False
+pipelining = True
+forks = 6
+
+[ssh_connection]
+ssh_args = -C -o ControlMaster=no -o ControlPersist=60s
+pipelining=True
+EOT
+
+
 
 echo " ### Pushing Ansible Hosts File ###"
 mkdir -p /etc/ansible
@@ -297,6 +336,24 @@ exit 0
 #CUMULUS-AUTOPROVISIONING
 EOT
 
+echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
+echo "exit" >> /home/vagrant/.bash_profile
+
+echo " ### Clone Repo ###"
+git clone https://github.com/CumulusNetworks/cldemo-evpn-symmetric /home/cumulus/cldemo-evpn-symmetric
+
+echo " ### Start Apache for ZTP ###"
+sudo systemctl start apache2
+
+echo " ### Enable dnsmasq ###"
+sudo systemctl enable dnsmasq.service
+sudo systemctl start dnsmasq.service
+
+echo " ### Install PAT rule in iptables for outbound access via oob-mgmt ###"
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
 echo "############################################"
 echo "      DONE!"
 echo "############################################"
+ETH0_ADDR=`ifconfig eth0 | grep 10\.255 | cut -d ' ' -f 12 | cut -d ':' -f 2`
+echo "sudo iptables -t nat -A PREROUTING -i bond0 -p tcp --dport XXXX -j DNAT --to-destination $ETH0_ADDR:32666"
