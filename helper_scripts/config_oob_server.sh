@@ -328,8 +328,10 @@ sed -i 's/^server 0.cumulusnetworks.pool.ntp.org iburst/server 192.168.0.254 ibu
 
 ping 8.8.8.8 -c2
 if [ "\$?" == "0" ]; then
+  echo "deb https://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.0" > /etc/apt/sources.list.d/netq.list
   apt-get update -qy
   apt-get install ntpdate -qy
+  apt-get install -yq cumulus-netq
 fi
 
 echo " " >/etc/network/interfaces
@@ -354,7 +356,8 @@ echo "  port: 32708" >>/etc/netq/netq.yml
 echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
 echo "  vrf: mgmt" >>/etc/netq/netq.yml
 
-systemctl enable netqd
+netq config restart agent
+netq config restart cli
 
 nohup bash -c 'sleep 2; shutdown now -r "Rebooting to Complete ZTP"' &
 exit 0
