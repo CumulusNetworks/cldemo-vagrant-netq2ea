@@ -345,8 +345,7 @@ echo "iface mgmt" >>/etc/network/interfaces
 echo "    address 127.0.0.1/8" >>/etc/network/interfaces
 echo "    vrf-table auto" >>/etc/network/interfaces
 
-echo " " >/etc/netq/netq.yml
-echo "netq-agent:" >>/etc/netq/netq.yml
+echo "netq-agent:" >/etc/netq/netq.yml
 echo "  port: 31980" >>/etc/netq/netq.yml
 echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
 echo "  vrf: mgmt" >>/etc/netq/netq.yml
