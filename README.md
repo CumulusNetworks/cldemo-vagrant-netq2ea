@@ -21,8 +21,9 @@ Using:
 6) `vagrant ssh oob-mgmt-server`
 7) Once in the oob-mgmt-server, the cldemo-evpn-symmetric demo is in the home dir. `cd cldemo-evpn-symmetric`
 8) `ansible-playbook run_demo.yml`
+9) rejoyce
 
-Once you run this, it should provision the cldemo-evpn-symmetric demo and have all of the netq agents installed and configured and registered with the telemetry server.  In other words, that should be it.  You can just hit your host machine on eth0 IP address and it should load the GUI
+Once you run this, it should provision the cldemo-evpn-symmetric demo and have all of the netq agents installed and configured and registered with the telemetry server.  In other words, that should be it.  You can just hit your host machine on eth0 IP address and it should load the GUI. All the cards/features should light up BGP, EVPN, LLDP, CLAG
 
 Everything below this line is from the original cldemo-vagrant 
 
