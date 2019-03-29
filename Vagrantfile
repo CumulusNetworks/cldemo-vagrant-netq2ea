@@ -101,7 +101,7 @@ Vagrant.configure("2") do |config|
 
   wbid = 1
   offset = wbid * 100
-
+  guiport = wbid * 8000
 
   config.vm.provider :libvirt do |domain|
     domain.management_network_address = "10.255.#{wbid}.0/24"
@@ -116,7 +116,7 @@ Vagrant.configure("2") do |config|
   ##### DEFINE VM for oob-mgmt-server #####
   config.vm.define "oob-mgmt-server" do |device|
     
-    device.vm.hostname = "oob-mgmt-server" 
+    #device.vm.hostname = "oob-mgmt-server" 
     
     device.vm.box = "cumulus/ts202"
 
@@ -140,7 +140,7 @@ Vagrant.configure("2") do |config|
             :libvirt__iface_name => 'eth1',
             auto_config: false
     
-    config.vm.network "forwarded_port", guest: 32666, host: 32666, host_ip:"0.0.0.0"		
+    config.vm.network "forwarded_port", guest: 32666, host: guiport, host_ip:"0.0.0.0"		
 
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
