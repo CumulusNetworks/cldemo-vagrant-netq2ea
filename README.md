@@ -1,6 +1,16 @@
 # Cumulus Linux Demo Framework
 ![Reference Topology](./documentation/cldemo_topology.png "Reference Topology")
 
+Welcome to jbetz super hack job to get the netq2.0 telemetry server shoved into the reference topology. Because this is supposed to be a temporary thing, i didn't take a lot of time to design this with the future in mind. Sorry 'bout that<br>
+<br>
+I crammed all of the extras needed for oob-mgmt-server and to install the netq2.0 agents into the helper_scripts. Its terrible.  
+
+I'm going to add more release notes and instructions here soon.
+
+Everything below this line is from the original cldemo-vagrant 
+
+-------------------------------------------------------------------------
+
 
 Welcome to the Cumulus Linux Demo Framework, which provides virtual demos of features and 
 configurations with Cumulus Linux. Follow the [Prerequisites and Getting Started](#prerequisites-and-getting-started) 
