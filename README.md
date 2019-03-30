@@ -1,9 +1,9 @@
 # Cumulus Linux Demo Framework
 ![Reference Topology](./documentation/cldemo_topology.png "Reference Topology")
 
-Welcome to the jbetz super hack job to get the netq2.0 telemetry server shoved into the reference topology. Because this is supposed to be a temporary thing, i didn't take a lot of time to design this with the future in mind. Sorry 'bout that<br>
+Welcome to the jbetz super hack job to get the netq2.x telemetry server shoved into the reference topology. Because this is supposed to be a temporary thing, I didn't take a lot of time to design this with the future in mind. Sorry 'bout that<br>
 <br>
-I crammed all of the extras needed to provision a proper oob-mgmt-server and to install the netq2.0 agents into the helper_scripts. Its terrible.  
+I crammed all of the extras needed to provision a proper oob-mgmt-server and to install the netq2.0 agents into the helper_scripts so it makes the vagrant up all slow and crappy looking. Its terrible.  
 
 Only libvirt tested. See more deets here: https://wiki.cumulusnetworks.com/display/PC/Field+Team+Workbenches
 
@@ -21,11 +21,12 @@ Using:
 6) `vagrant ssh oob-mgmt-server`
 7) Once in the oob-mgmt-server, the cldemo-evpn-symmetric demo is in the home dir. `cd cldemo-evpn-symmetric`
 8) `ansible-playbook run_demo.yml`
-9) rejoyce
+9) watch `kubectl get pods` and `docker ps | head` for all of the netq containers to come up and finish loading
+10) Launch dat GUI (see wiki page above for what the links/ip/ports might be right now)
 
-Once you run this, it should provision the cldemo-evpn-symmetric demo and have all of the netq agents installed and configured and registered with the telemetry server.  In other words, that should be it.  You can just hit your host machine on eth0 IP address and it should load the GUI. All the cards/features should light up BGP, EVPN, LLDP, CLAG
+Once you do all this, you are running the cldemo-evpn-symmetric demo with netq2.x. The agents are all configured and registered with the telemetry server.  In other words, that should be it. All the cards/features should light up BGP, EVPN, LLDP, CLAG
 
-Everything below this line is from the original cldemo-vagrant readme and might still apply? (Who knows what i broke here my bad.)
+Everything below this line is from the original cldemo-vagrant readme and might still apply? If you don't want to do cldemo-vagrant-evpn, that's fine the other demos *should* work unmodified.
 
 -------------------------------------------------------------------------
 
