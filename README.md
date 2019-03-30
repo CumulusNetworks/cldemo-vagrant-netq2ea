@@ -1,4 +1,4 @@
-# Cumulus Linux Demo Framework
+# Cumulus Linux Demo Framework Fork for NetQ2.x On Packet.net m2.xlarge Ubuntu 16.04 server
 ![Reference Topology](./documentation/cldemo_topology.png "Reference Topology")
 
 Welcome to the jbetz super hack job to get the netq2.x telemetry server shoved into the reference topology. Because this is supposed to be a temporary thing, I didn't take a lot of time to design this with the future in mind. Sorry 'bout that<br>
