@@ -1,11 +1,11 @@
 # Cumulus Linux Demo Framework
 ![Reference Topology](./documentation/cldemo_topology.png "Reference Topology")
 
-Welcome to jbetz super hack job to get the netq2.0 telemetry server shoved into the reference topology. Because this is supposed to be a temporary thing, i didn't take a lot of time to design this with the future in mind. Sorry 'bout that<br>
+Welcome to the jbetz super hack job to get the netq2.0 telemetry server shoved into the reference topology. Because this is supposed to be a temporary thing, i didn't take a lot of time to design this with the future in mind. Sorry 'bout that<br>
 <br>
 I crammed all of the extras needed to provision a proper oob-mgmt-server and to install the netq2.0 agents into the helper_scripts. Its terrible.  
 
-Only libvirt tested
+Only libvirt tested. See more deets here: https://wiki.cumulusnetworks.com/display/PC/Field+Team+Workbenches
 
 Prerequisites:
 * Clone `git clone https://github.com/CumulusNetworks/cldemo-vagrant-netq2ea.git`
@@ -15,7 +15,7 @@ Prerequisites:
 Using:
 1) cd to the directory from the git clone 
 2) `vagrant up oob-mgmt-server oob-mgmt-switch`
-3) wait for that to load (its a bit messy it's fine)
+3) wait for that to load (its a bit messy. don't mind the red lines. it's fine)
 4) `vagrant up`
 5) wait for that to load (also messy but hey what are ya gonna do)
 6) `vagrant ssh oob-mgmt-server`
@@ -25,7 +25,7 @@ Using:
 
 Once you run this, it should provision the cldemo-evpn-symmetric demo and have all of the netq agents installed and configured and registered with the telemetry server.  In other words, that should be it.  You can just hit your host machine on eth0 IP address and it should load the GUI. All the cards/features should light up BGP, EVPN, LLDP, CLAG
 
-Everything below this line is from the original cldemo-vagrant 
+Everything below this line is from the original cldemo-vagrant readme and might still apply? (Who knows what i broke here my bad.)
 
 -------------------------------------------------------------------------
 
