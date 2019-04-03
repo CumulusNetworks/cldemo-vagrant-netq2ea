@@ -359,6 +359,10 @@ echo "  vrf: mgmt" >>/etc/netq/netq.yml
 netq config restart agent
 netq config restart cli
 
+systemctl stop ntp.service
+systemctl disable ntp.service
+systemctl start ntp@mgmt  
+
 nohup bash -c 'sleep 2; shutdown now -r "Rebooting to Complete ZTP"' &
 exit 0
 #CUMULUS-AUTOPROVISIONING
