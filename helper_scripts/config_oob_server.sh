@@ -226,7 +226,7 @@ systemctl restart dhcpd
 echo " ### Push Hosts File ###"
 cat << EOT > /etc/hosts
 127.0.0.1 localhost 
-
+127.0.1.1 oob-mgmt-server
 192.168.0.254 oob-mgmt-server 
 
 192.168.0.1 oob-mgmt-switch
