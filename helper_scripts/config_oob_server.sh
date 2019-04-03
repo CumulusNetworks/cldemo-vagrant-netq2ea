@@ -376,18 +376,18 @@ git clone https://github.com/CumulusNetworks/cldemo-evpn-symmetric /home/cumulus
 echo " ### Patch the Repo ###"
 # change the bond name to 'bond0' because 'uplink' doesn't really work. It functions, like it arps and I can ping default gw,
 # but something is wonky in kernel land and the post-up route to the rest of the topo won't work
-sed -i -e 's/uplink/bond0/g' cldemo-evpn-symmetric/config/server04/interfaces
-sed -i -e 's/uplink/bond0/g' cldemo-evpn-symmetric/config/server03/interfaces
-sed -i -e 's/uplink/bond0/g' cldemo-evpn-symmetric/config/server02/interfaces
-sed -i -e 's/uplink/bond0/g' cldemo-evpn-symmetric/config/server01/interfaces
+sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server04/interfaces
+sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server03/interfaces
+sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server02/interfaces
+sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server01/interfaces
 #
 # I don't want a default route on the bond because then you can't default route out through oob-server
 # for random package update/downloads for whatever kinda shenanigans you want to get into
 # We only need 10.0.0.0/8 at worst and 10.2.4.0/24 at best.
-sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' cldemo-evpn-symmetric/config/server01/interfaces
-sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' cldemo-evpn-symmetric/config/server02/interfaces
-sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' cldemo-evpn-symmetric/config/server03/interfaces
-sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' cldemo-evpn-symmetric/config/server04/interfaces
+sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' /home/cumulus/cldemo-evpn-symmetric/config/server01/interfaces
+sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' /home/cumulus/cldemo-evpn-symmetric/config/server02/interfaces
+sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' /home/cumulus/cldemo-evpn-symmetric/config/server03/interfaces
+sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' /home/cumulus/cldemo-evpn-symmetric/config/server04/interfaces
 
 echo " ### Start Apache for ZTP ###"
 systemctl start apache2
