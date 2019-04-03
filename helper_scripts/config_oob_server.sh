@@ -377,7 +377,7 @@ echo " ### Enable dnsmasq ###"
 systemctl enable dnsmasq.service
 systemctl start dnsmasq.service
 
-echo " ### Enable dnsmasq ###"
+echo " ### Restart ntpd ###"
 systemctl restart ntp.service
 
 echo " ### Install PAT rule in iptables for outbound access via oob-mgmt ###"
