@@ -371,11 +371,14 @@ echo " ### Clone Repo ###"
 git clone https://github.com/CumulusNetworks/cldemo-evpn-symmetric /home/cumulus/cldemo-evpn-symmetric
 
 echo " ### Start Apache for ZTP ###"
-sudo systemctl start apache2
+systemctl start apache2
 
 echo " ### Enable dnsmasq ###"
-sudo systemctl enable dnsmasq.service
-sudo systemctl start dnsmasq.service
+systemctl enable dnsmasq.service
+systemctl start dnsmasq.service
+
+echo " ### Enable dnsmasq ###"
+systemctl restart ntp.service
 
 echo " ### Install PAT rule in iptables for outbound access via oob-mgmt ###"
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
