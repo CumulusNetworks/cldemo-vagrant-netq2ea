@@ -81,6 +81,20 @@ netq config add cli server 192.168.0.254
 netq config restart agent
 netq config restart cli
 
+# Ok this is a dirty hack to get netq 2.0 interface checks to succeed. It causes no functional problems otherwise and please don't do this unless you need a clean netq interface check
+# netq detects a autonegotiation mismatch between all server and leaf ports. Ubuntu is autoneg on, CL leafs are autoneg off
+# looks like ubuntu needs real speed/duplex from emulated e1000 in libvirt to make bond come up, but i can't disable autoneg
+# but CL VX doesn't seem to let you enable autoneg either
+# But if you set ubuntu to 100 full autoneg off, then ethtool shows autoneg off and netq is happy
+# ethtool still shows speed as 1000mbps when you do this, but who knows what else it breaks.
+ethtool -s eth1 speed 100 duplex full autoneg off
+ethtool -s eth2 speed 100 duplex full autoneg off
+echo "#!/bin/sh -e" >/etc/rc.local
+echo "/sbin/ethtool -s eth1 speed 100 duplex full autoneg off" >>/etc/rc.local
+echo "/sbin/ethtool -s eth2 speed 100 duplex full autoneg off" >>/etc/rc.local
+echo "exit 0" >>/etc/rc.local
+#end dirty hack, please find a better way to do this or don't do it at all because it feels janky af and normally causes no problems.
+
 echo "#################################"
 echo "   Finished"
 echo "#################################"
