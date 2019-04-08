@@ -372,6 +372,7 @@ echo "exit" >> /home/vagrant/.bash_profile
 
 echo " ### Clone Repo ###"
 git clone https://github.com/CumulusNetworks/cldemo-evpn-symmetric /home/cumulus/cldemo-evpn-symmetric
+chown cumulus:cumulus -R /home/cumulus/cldemo-evpn-symmetric
 
 echo " ### Patch the Repo ###"
 # change the bond name to 'bond0' because 'uplink' doesn't really work. It functions, like it arps and I can ping default gw,
