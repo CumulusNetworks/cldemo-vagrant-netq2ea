@@ -99,7 +99,7 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  wbid = 6
+  wbid = 1
   offset = wbid * 100
   guiport = wbid + 8000
 
