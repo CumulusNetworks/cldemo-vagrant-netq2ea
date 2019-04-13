@@ -36,7 +36,8 @@ if [ "$?" == "0" ]; then
   wget -O- https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey | apt-key add -
   #echo "deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-2.0" > /etc/apt/sources.list.d/cl.list
   apt-get update -qy
-  apt-get install unzip lldpd ntp ntpdate traceroute cumulus-netq -qy
+  apt-get install unzip lldpd ntp ntpdate traceroute -qy
+  #apt-get install cumulus-netq -qy
   echo "configure lldp portidsubtype ifname" > /etc/lldpd.d/port_info.conf 
 fi
 
