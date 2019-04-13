@@ -355,8 +355,8 @@ echo "  port: 32708" >>/etc/netq/netq.yml
 echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
 echo "  vrf: mgmt" >>/etc/netq/netq.yml
 
-dpkg -i /home/vagrant/netq-agent_2.1.0-cl3u15~1554921854.8c88ec9_amd64.deb
-dpkg -i /home/vagrant/netq-apps_2.1.0-cl3u15~1554921854.8c88ec9_amd64.deb
+dpkg -i /home/vagrant/netq-agent_2.1.0-cl3u15_1555095010.3a0ce46_amd64.deb
+dpkg -i /home/vagrant/netq-apps_2.1.0-cl3u15_1555095010.3a0ce46_amd64.deb
 
 netq config restart agent
 netq config restart cli
