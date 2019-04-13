@@ -2078,9 +2078,9 @@ end
 
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
-    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
 
-    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
     
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2176,9 +2176,9 @@ end
 
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
-    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
 
-    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
     
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2274,9 +2274,9 @@ end
 
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
-    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
 
-    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
     
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2372,9 +2372,9 @@ end
 
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
-    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
 
-    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
     
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2470,9 +2470,9 @@ end
 
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
-    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-agent_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
 
-    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15~1554921915.8c88ec9_amd64.deb"
+    config.vm.provision "file", source: "./netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb", destination: "netq-apps_2.1.0-ub16.04u15_1555095012.3a0ce46_amd64.deb"
     
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
