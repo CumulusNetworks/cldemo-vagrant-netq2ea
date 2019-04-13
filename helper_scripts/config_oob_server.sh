@@ -396,10 +396,10 @@ sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' /home/cumulus/cldemo-evpn-symme
 # add advertise-svi-ip
 # can't add it to the official repo yet because this only exists in 3.7.4 and cldemo-vagrant is skipping that build
 # once cldemo-vagrant runs 3.7.5 put this change there.
-sed -i -e 's/advertise-all-vni/advertise-all-vni\r\n\ \ advertise-svi-ip/' /home/cumulus/cldemo-evpn-symmetric/config/leaf01/frr.conf
-sed -i -e 's/advertise-all-vni/advertise-all-vni\r\n\ \ advertise-svi-ip/' /home/cumulus/cldemo-evpn-symmetric/config/leaf02/frr.conf
-sed -i -e 's/advertise-all-vni/advertise-all-vni\r\n\ \ advertise-svi-ip/' /home/cumulus/cldemo-evpn-symmetric/config/leaf03/frr.conf
-sed -i -e 's/advertise-all-vni/advertise-all-vni\r\n\ \ advertise-svi-ip/' /home/cumulus/cldemo-evpn-symmetric/config/leaf04/frr.conf
+#sed -i -e 's/advertise-all-vni/advertise-all-vni\r\n\ \ advertise-svi-ip/' /home/cumulus/cldemo-evpn-symmetric/config/leaf01/frr.conf
+#sed -i -e 's/advertise-all-vni/advertise-all-vni\r\n\ \ advertise-svi-ip/' /home/cumulus/cldemo-evpn-symmetric/config/leaf02/frr.conf
+#sed -i -e 's/advertise-all-vni/advertise-all-vni\r\n\ \ advertise-svi-ip/' /home/cumulus/cldemo-evpn-symmetric/config/leaf03/frr.conf
+#sed -i -e 's/advertise-all-vni/advertise-all-vni\r\n\ \ advertise-svi-ip/' /home/cumulus/cldemo-evpn-symmetric/config/leaf04/frr.conf
 
 echo " ### Start Apache for ZTP ###"
 systemctl start apache2
