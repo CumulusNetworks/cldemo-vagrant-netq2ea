@@ -98,6 +98,9 @@ echo "/sbin/ethtool -s eth2 speed 100 duplex full autoneg off" >>/etc/rc.local
 echo "exit 0" >>/etc/rc.local
 #end dirty hack, please find a better way to do this or don't do it at all because it feels janky af and normally causes no problems.
 
+#add cronjob to ping and send traffic for bridge learning
+echo "* * * * * /bin/ping -q -c 4 10.0.0.253" >>/etc/crontab
+
 echo "#################################"
 echo "   Finished"
 echo "#################################"
