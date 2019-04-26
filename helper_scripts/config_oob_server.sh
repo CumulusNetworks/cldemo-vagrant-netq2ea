@@ -325,6 +325,9 @@ echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
 sed -i '/^server [1-3]/d' /etc/ntp.conf
 sed -i 's/^server 0.cumulusnetworks.pool.ntp.org iburst/server 192.168.0.254 iburst/g' /etc/ntp.conf
 
+# Purge NetQ 1.4 
+sudo apt -y purge cumulus-netq netq-agent netq-apps python-netq-lib
+
 ping 8.8.8.8 -c2
 if [ "\$?" == "0" ]; then
   echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.1" > /etc/apt/sources.list.d/netq.list
