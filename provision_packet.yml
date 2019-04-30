@@ -87,3 +87,8 @@
           - export VAGRANT_HOME=/mnt/nvme/.vagrant_boxes
           - vagrant plugin install vagrant-libvirt
     
+    - name: Set Vagrant env variable for box file location
+      lineinfile: 
+        path: /root/.bash_profile
+        line: export VAGRANT_HOME=/mnt/nvme/.vagrant_boxes/
+        
