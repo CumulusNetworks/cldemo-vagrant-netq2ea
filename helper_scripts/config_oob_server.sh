@@ -330,7 +330,7 @@ sudo apt -y purge cumulus-netq netq-agent netq-apps python-netq-lib
 
 ping 8.8.8.8 -c2
 if [ "\$?" == "0" ]; then
-  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.1" > /etc/apt/sources.list.d/netq.list
+  # echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.1" > /etc/apt/sources.list.d/netq.list
   apt-get update -qy
   apt-get install ntpdate -qy
   apt-get install -yq cumulus-netq
@@ -357,6 +357,12 @@ echo "netq-cli:" >>/etc/netq/netq.yml
 echo "  port: 32708" >>/etc/netq/netq.yml
 echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
 echo "  vrf: mgmt" >>/etc/netq/netq.yml
+
+
+
+dpkg -i /home/vagrant/netq-agent_cl.deb
+dpkg -i /home/vagrant/netq-apps_cl.deb
+
 
 netq config restart agent
 netq config restart cli

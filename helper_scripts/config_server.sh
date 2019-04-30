@@ -41,6 +41,9 @@ if [ "$?" == "0" ]; then
   echo "configure lldp portidsubtype ifname" > /etc/lldpd.d/port_info.conf 
 fi
 
+dpkg -i /home/vagrant/netq-agent_ubuntu.deb
+dpkg -i /home/vagrant/netq-apps_ubuntu.deb
+
 # Set Timezone
 cat << EOT > /etc/timezone
 Etc/UTC
