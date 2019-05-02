@@ -99,7 +99,7 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  wbid = 1
+  wbid = 9
   offset = wbid * 100
   guiport = wbid + 8000
   netq_version = "211rc2"
