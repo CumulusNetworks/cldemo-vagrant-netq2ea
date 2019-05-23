@@ -3,8 +3,9 @@
 echo "################################################"
 echo "  Running Management Server Setup (config_oob_server.sh)..."
 echo "################################################"
-echo -e "\n This script was originally written for CumulusCommunity/vx_oob_server and now slightly modified to deploy Netq2.x"
+echo -e "\n This script was originally written for CumulusCommunity/vx_oob_server and now slightly modified to deploy NetQ 2.1.1 in place of the oob-mgmt-server"
 echo " Detected vagrant user is: $username"
+
 echo " ### Overwriting /etc/network/interfaces ###"
 cat <<EOT > /etc/network/interfaces
 auto lo
@@ -29,7 +30,7 @@ sudo sh -c 'echo "deb-src http://deb.debian.org/debian/ jessie main contrib non-
 sudo sh -c 'echo "deb http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
 sudo sh -c 'echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
 sudo sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list.d/jessie.list'
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 >/dev/null 2>&1
 
 sudo apt-get update
 
@@ -70,8 +71,6 @@ interface listen eth1
 EOT
 
 
-
-
 echo " ### Pushing Ansible Configuration ###"
 cat << EOT > /etc/ansible/ansible.cfg
 [defaults]
@@ -86,8 +85,6 @@ forks = 6
 ssh_args = -C -o ControlMaster=no -o ControlPersist=60s
 pipelining=True
 EOT
-
-
 
 echo " ### Pushing Ansible Hosts File ###"
 mkdir -p /etc/ansible
@@ -293,6 +290,9 @@ cp /home/cumulus/.ssh/id_rsa.pub /var/www/html/authorized_keys
 
 chmod 700 -R /home/cumulus/.ssh
 chown cumulus:cumulus -R /home/cumulus/.ssh
+
+echo "### Adding to .ssh_config to avoid HostKeyChecking"
+printf "Host * \n\t StrictHostKeyChecking no\n" >> /home/cumulus/.ssh/config
 
 echo " ### Pushing Fake License ###"
 echo "this is a fake license" > /var/www/html/license.lic
