@@ -90,9 +90,10 @@ netq config restart cli
 # ethtool still shows speed as 1000mbps when you do this, but who knows what else it breaks.
 ethtool -s eth1 speed 100 duplex full autoneg off
 ethtool -s eth2 speed 100 duplex full autoneg off
-echo "#!/bin/sh -e" >/etc/rc.local
+echo "#!/bin/bash" >/etc/rc.local
 echo "/sbin/ethtool -s eth1 speed 100 duplex full autoneg off" >>/etc/rc.local
 echo "/sbin/ethtool -s eth2 speed 100 duplex full autoneg off" >>/etc/rc.local
+echo "sudo systemctl restart networking" >>/etc/rc.local
 echo "exit 0" >>/etc/rc.local
 #end dirty hack, please find a better way to do this or don't do it at all because it feels janky af and normally causes no problems.
 
