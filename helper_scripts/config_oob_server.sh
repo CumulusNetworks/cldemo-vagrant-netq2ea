@@ -410,7 +410,7 @@ echo " ### Start Apache for ZTP ###"
 systemctl start apache2
 
 echo " ### Enable dnsmasq ###"
-systemctl enable dnsmasq.service
+systemctl enable dnsmasq.service > /dev/null 2>&1
 systemctl start dnsmasq.service
 
 echo " ### Restart ntpd ###"
