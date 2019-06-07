@@ -5,6 +5,9 @@ echo "  Running config_server.sh"
 echo "#################################"
 sudo su
 
+# to make the red "dpkg-reconfigure: unable to re-open stdin: No file or directory" not happen from apt-get stuff
+export DEBIAN_FRONTEND=noninteractive
+
 # Make DHCP Try Over and Over Again
 echo "retry 1;" >> /etc/dhcp/dhclient.conf
 
