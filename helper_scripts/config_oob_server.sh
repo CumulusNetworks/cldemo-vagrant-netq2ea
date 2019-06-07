@@ -6,6 +6,11 @@ echo "################################################"
 echo -e "\n This script was originally written for CumulusCommunity/vx_oob_server and now slightly modified to deploy NetQ 2.1.1 in place of the oob-mgmt-server"
 echo " Detected vagrant user is: $username"
 
+sudo su
+
+#fix the red 'dpkg-reconfigure: unable to re-open stdin: No file or directory' from apt-get stuff
+export DEBIAN_FRONTEND=noninteractive
+
 echo " ### Overwriting /etc/network/interfaces ###"
 cat <<EOT > /etc/network/interfaces
 auto lo
@@ -25,21 +30,21 @@ EOT
 sudo ifup eth1
 
 echo " ### Adding Repos ###"
-sudo sh -c 'echo "deb http://deb.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list'
-sudo sh -c 'echo "deb-src http://deb.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sudo sh -c 'echo "deb http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sudo sh -c 'echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sudo sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list.d/jessie.list'
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 >/dev/null 2>&1
+sh -c 'echo "deb http://deb.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list'
+sh -c 'echo "deb-src http://deb.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
+sh -c 'echo "deb http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
+sh -c 'echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
+sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list.d/jessie.list'
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 >/dev/null 2>&1
 
-sudo apt-get update
+apt-get update
 
 echo " ### Install Ansible ###"
-sudo apt-get install -yq git python-netaddr sshpass
-sudo apt-get install -yq -t trusty ansible
+apt-get install -yq git python-netaddr sshpass
+apt-get install -yq -t trusty ansible
 
 echo " ### Install Apache ###"
-sudo apt-get install -yq apache2
+apt-get install -yq apache2
 
 echo " ### Write /etc/ntp.conf ###"
 cat << EOT > /etc/ntp.conf
