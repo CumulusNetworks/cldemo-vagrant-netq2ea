@@ -3,7 +3,7 @@
 echo "################################################"
 echo "  Running Management Server Setup (config_oob_server.sh)..."
 echo "################################################"
-echo -e "\n This script was originally written for CumulusCommunity/vx_oob_server and now slightly modified to deploy NetQ 2.1.1 in place of the oob-mgmt-server"
+echo -e "\n This script was originally written for CumulusCommunity/vx_oob_server and now slightly modified to deploy NetQ 2.X in place of the oob-mgmt-server"
 echo " Detected vagrant user is: $username"
 
 sudo su
