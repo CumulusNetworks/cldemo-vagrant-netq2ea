@@ -222,7 +222,7 @@ group {
 EOT
 
 chmod 755 -R /etc/dhcp/*
-systemctl enable dhcpd
+systemctl enable dhcpd > /dev/null 2>&1
 systemctl restart dhcpd
 
 echo " ### Push Hosts File ###"
