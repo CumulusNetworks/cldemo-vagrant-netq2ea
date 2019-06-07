@@ -74,8 +74,8 @@ restrict ::1
 interface listen eth0
 EOT
 
-sudo systemctl enable ntp.service
-sudo systemctl start ntp.service
+/lib/systemd/systemd-sysv-install enable ntp
+systemctl start ntp.service
 
 netq config add agent server 192.168.0.254
 netq config add cli server 192.168.0.254
