@@ -36,7 +36,7 @@ chmod 700 /home/cumulus/.ssh
 # Other stuff
 ping 8.8.8.8 -c2
 if [ "$?" == "0" ]; then
-  wget -O- https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey | apt-key add -
+  wget -O- https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey | apt-key add - &> /dev/null
   echo "deb [arch=amd64] https://apps3.cumulusnetworks.com/repos/deb xenial netq-latest" > /etc/apt/sources.list.d/cl.list
   apt-get update -qy
   apt-get install unzip lldpd ntp ntpdate traceroute -qy
