@@ -385,10 +385,10 @@ chown cumulus:cumulus -R /home/cumulus/cldemo-evpn-symmetric
 echo " ### Patch the Repo ###"
 # change the bond name to 'bond0' because 'uplink' doesn't really work. It functions, like it arps and I can ping default gw,
 # but something is wonky in kernel land and the post-up route to the rest of the topo won't work
-sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server04/interfaces
-sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server03/interfaces
-sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server02/interfaces
-sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server01/interfaces
+#sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server04/interfaces
+#sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server03/interfaces
+#sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server02/interfaces
+#sed -i -e 's/uplink/bond0/g' /home/cumulus/cldemo-evpn-symmetric/config/server01/interfaces
 #
 # I don't want a default route on the bond because then you can't default route out through oob-server
 # for random package update/downloads for whatever kinda shenanigans you want to get into
