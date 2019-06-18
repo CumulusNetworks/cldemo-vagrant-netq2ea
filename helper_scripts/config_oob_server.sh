@@ -416,7 +416,13 @@ echo " ### Restart ntpd ###"
 systemctl restart ntp.service
 
 echo " ### Install PAT rule in iptables for outbound access via oob-mgmt ###"
-sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE # install rule now
+# also put in rc.local so it adds the rule on reboot
+echo "!/bin/sh -e" >/etc/rc.local
+echo " " >>/etc/rc.local
+echo "iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE" >>/etc/rc.local
+echo "exit 0" >>/etc/rc.local
+
 
 echo "############################################"
 echo "      DONE!"
