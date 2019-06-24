@@ -1,15 +1,9 @@
-# Cumulus Linux Demo Framework Fork for NetQ2.x 
+# Cumulus Linux Demo Framework Fork for NetQ2.x - Cloud OPTA Branch
 Built On Packet.net m2.xlarge Ubuntu 16.04 server
 ![Reference Topology](./documentation/cldemo_topology.png "Reference Topology")
 
-Welcome to the jbetz super hack job to get the netq2.x telemetry server shoved into the reference topology. Because this is supposed to be a temporary thing, I didn't take a lot of time to design this with the future in mind. Sorry 'bout that<br>
-<br>
-I crammed all of the extras needed to provision a proper oob-mgmt-server and to install the netq2.0 agents into the helper_scripts so it makes the vagrant up all slow and crappy looking. Its terrible.  
-
-Only libvirt tested. See more deets here: https://wiki.cumulusnetworks.com/display/PC/Field+Team+Workbenches
-
 Prerequisites:
-* Clone `git clone https://github.com/CumulusNetworks/cldemo-vagrant-netq2ea.git`
+* Clone `git clone -b cloud-opta https://github.com/CumulusNetworks/cldemo-vagrant-netq2ea.git`
 * Download the NetQ 2.x libvirt.box file
 * Add the image to vagrant: `vagrant box add cumulus-netq-server-2.0.2-ts-amd64-libvirt.box --name=cumulus/ts202`
 
