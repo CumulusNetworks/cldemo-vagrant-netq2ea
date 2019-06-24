@@ -1,8 +1,0 @@
-.vagrant/*
-ccw-wbenchvm-ansible/*
-cldemo-ansible/*
-ccw-wbenchvm-ansible*
-cldemo-ansible*
-dhcp_mac_map
-topology.dot.local
-helper_scripts/auto_mgmt_network/*
