@@ -3,9 +3,9 @@
 echo "################################################"
 echo "  Running Management Server Setup (config_oob_server.sh)..."
 echo "################################################"
-echo -e "\n This script was originally written for CumulusCommunity/vx_oob_server and now slightly modified to deploy NetQ 2.X in place of the oob-mgmt-server"
+echo -e "\n This script was originally written for CumulusCommunity/vx_oob_server"
+echo -e "it has been modified to deploy NetQ 2.X Cloud OPTA in place of the oob-mgmt-server"
 echo " Detected vagrant user is: $username"
-
 sudo su
 
 #fix the red 'dpkg-reconfigure: unable to re-open stdin: No file or directory' from apt-get stuff
@@ -27,7 +27,7 @@ iface eth1
 
 EOT
 
-sudo ifup eth1
+ifup eth1
 
 echo " ### Adding Repos ###"
 sh -c 'echo "deb http://deb.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list'
@@ -41,6 +41,13 @@ apt-get update
 
 echo " ### Install Git ###"
 apt-get install -yq git
+
+echo " ### Install pip ###"
+apt-get install -yq python-pip
+
+echo " ### janky cloud-opta fixes"
+pip install --upgrade six
+pip install --upgrade PyYAML
 
 echo " ### Install Ansible ###"
 apt-get install -yq -t trusty ansible
@@ -78,7 +85,7 @@ interface listen eth1
 EOT
 
 
-mkdir /etc/ansible
+#mkdir /etc/ansible
 echo " ### Pushing Ansible Configuration ###"
 cat << EOT > /etc/ansible/ansible.cfg
 [defaults]
