@@ -45,7 +45,7 @@ apt-get install -yq git
 echo " ### Install pip ###"
 apt-get install -yq python-pip
 
-echo " ### janky cloud-opta fixes"
+echo " ### cloud-opta fixes"
 pip install --upgrade six
 pip install --upgrade PyYAML
 
