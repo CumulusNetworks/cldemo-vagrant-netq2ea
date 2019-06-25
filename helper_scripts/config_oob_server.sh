@@ -353,8 +353,10 @@ if [ "\$?" == "0" ]; then
   echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.1" > /etc/apt/sources.list.d/netq.list
   apt-get update -qy
   apt-get install ntpdate -qy
-  apt-get install -yq cumulus-netq
 fi
+
+dpkg -i /home/vagrant/netq-agent_cl.deb
+dpkg -i /home/vagrant/netq-apps_cl.deb
 
 echo " " >/etc/network/interfaces
 echo "auto lo" >>/etc/network/interfaces

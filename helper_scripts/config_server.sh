@@ -41,9 +41,11 @@ if [ "$?" == "0" ]; then
   echo "deb [arch=amd64] https://apps3.cumulusnetworks.com/repos/deb xenial netq-latest" > /etc/apt/sources.list.d/cl.list
   apt-get update -qy
   apt-get install unzip lldpd ntp ntpdate traceroute -qy
-  apt-get install cumulus-netq -qy
   echo "configure lldp portidsubtype ifname" > /etc/lldpd.d/port_info.conf 
 fi
+
+dpkg -i /home/vagrant/netq-agent_ubuntu.deb
+dpkg -i /home/vagrant/netq-apps_ubuntu.deb
 
 # Set Timezone
 cat << EOT > /etc/timezone
@@ -82,9 +84,10 @@ EOT
 systemctl start ntp.service
 
 netq config add agent server 192.168.0.254
-netq config add cli server 192.168.0.254
+#This needs to be done manuall with your special keys using cloud-opta
+#netq config add cli server 192.168.0.254
 netq config restart agent
-netq config restart cli
+#netq config restart cli
 
 # Ok this is a dirty hack to get netq 2.0 interface checks to succeed. It causes no functional problems otherwise and please don't do this unless you need a clean netq interface check
 # netq detects a autonegotiation mismatch between all server and leaf ports. Ubuntu is autoneg on, CL leafs are autoneg off
