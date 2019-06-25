@@ -102,7 +102,7 @@ Vagrant.configure("2") do |config|
   wbid = 14
   offset = wbid * 100
   #guiport = wbid + 8000
-  netq_version = 220rc1
+  netq_version = "220rc1"
 
   config.vm.provider :libvirt do |domain|
     domain.management_network_address = "10.255.#{wbid}.0/24"
