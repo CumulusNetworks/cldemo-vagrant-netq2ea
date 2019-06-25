@@ -99,7 +99,7 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  wbid = 1
+  wbid = 14
   offset = wbid * 100
   guiport = wbid + 8000
 
@@ -111,18 +111,16 @@ Vagrant.configure("2") do |config|
   end
 
 
-
-
   ##### DEFINE VM for oob-mgmt-server #####
   config.vm.define "oob-mgmt-server" do |device|
     
     device.vm.hostname = "oob-mgmt-server" 
     
-    device.vm.box = "cumulus/ts212"
+    device.vm.box = "cumulus/tscloud220rc1"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 65536
-      v.cpus = 8
+      v.memory = 8192
+      v.cpus = 4
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -140,10 +138,13 @@ Vagrant.configure("2") do |config|
             :libvirt__iface_name => 'eth1',
             auto_config: false
     
-    config.vm.network "forwarded_port", guest: 32666, host: guiport, host_ip:"0.0.0.0"		
+    #config.vm.network "forwarded_port", guest: 32666, host: guiport, host_ip:"0.0.0.0"		
 
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
+
+    #Copy the tarball onto /mnt/installables
+    config.vm.provision "file", source: "/mnt/nvme/220rc1-cloud-opta/NetQ-2.2.0-SNAPSHOT-opta.tgz", destination: "NetQ-2.2.0-SNAPSHOT-opta.tgz"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -164,8 +165,6 @@ end
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
-
-
 
     # NETWORK INTERFACES
       # link for swp1 --> oob-mgmt-server:eth1

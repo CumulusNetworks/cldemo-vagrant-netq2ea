@@ -39,8 +39,10 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 >/dev/
 
 apt-get update
 
+echo " ### Install Git ###"
+apt-get install -yq git
+
 echo " ### Install Ansible ###"
-apt-get install -yq git python-netaddr sshpass
 apt-get install -yq -t trusty ansible
 
 echo " ### Install Apache ###"
@@ -76,6 +78,7 @@ interface listen eth1
 EOT
 
 
+mkdir /etc/ansible
 echo " ### Pushing Ansible Configuration ###"
 cat << EOT > /etc/ansible/ansible.cfg
 [defaults]
@@ -92,7 +95,6 @@ pipelining=True
 EOT
 
 echo " ### Pushing Ansible Hosts File ###"
-mkdir -p /etc/ansible
 cat << EOT > /etc/ansible/hosts
 [oob-switch]
 oob-mgmt-switch ansible_host=192.168.0.1 ansible_user=cumulus
@@ -303,6 +305,12 @@ echo " ### Pushing Fake License ###"
 echo "this is a fake license" > /var/www/html/license.lic
 chmod 777 /var/www/html/license.lic
 
+
+echo " ### Move Cloud-Opta Tarball to /mnt/installables ###"
+mkdir /mnt/installables
+mv NetQ-2.2.0-SNAPSHOT-opta.tgz /mnt/installables/NetQ-2.2.0-SNAPSHOT-opta.tgz
+
+
 echo " ### Pushing ZTP Script ###"
 cat << EOT > /var/www/html/ztp_oob.sh
 #!/bin/bash
@@ -354,17 +362,12 @@ echo "iface mgmt" >>/etc/network/interfaces
 echo "    address 127.0.0.1/8" >>/etc/network/interfaces
 echo "    vrf-table auto" >>/etc/network/interfaces
 
-echo "netq-agent:" >/etc/netq/netq.yml
-echo "  port: 31980" >>/etc/netq/netq.yml
-echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
-echo "  vrf: mgmt" >>/etc/netq/netq.yml
-echo "netq-cli:" >>/etc/netq/netq.yml
-echo "  port: 32708" >>/etc/netq/netq.yml
-echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
-echo "  vrf: mgmt" >>/etc/netq/netq.yml
+netq config add agent server 192.168.0.254 vrf mgmt
+#This add cli below has to get added manually, we'll just do an ad-hoc ansible command for now.
+#netq config add cli server api.tb1.netqdev.cumulusnetworks.com access-key
 
 netq config restart agent
-netq config restart cli
+#netq config restart cli
 
 systemctl stop ntp.service
 systemctl disable ntp.service
