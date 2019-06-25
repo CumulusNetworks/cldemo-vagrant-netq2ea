@@ -4,14 +4,11 @@ Built On Packet.net m2.xlarge Ubuntu 16.04 server
 
 This is a fork of cldemo-vagrant where we add a NetQ server instead of the oob-mgmt-server image that is used in cldemo-vagrant.
 
-Branches:
-Master: Will be a full on prem release version on premise NetQ Telemetry Server
-
-debian-packages: Same as above, but used for instances when the NetQ agent needs to be manually installed from a package. Usually when we're doing release candidates
-
-cloud-opta: Will use a cloud-opta NetQ image instead of a full grown on prem telemetry server. This image uses only 8GB ram and 4 CPU cores. You must have some keys provided by engineering. See the readme of the branch.
-
-cloud-opta-debian-packages: Same as above, but used for instances when the NetQ agent needs to be manually installed from a package.
+Branches:  
+* master: Will be a full on prem release version on premise NetQ Telemetry Server   
+* debian-packages: Same as above, but used for instances when the NetQ agent needs to be manually installed from a package. Usually when we're doing release candidates  
+* cloud-opta: Will use a cloud-opta NetQ image instead of a full grown on prem telemetry server. This image uses only 8GB ram and 4 CPU cores. You must have some keys provided by engineering. See the readme of the branch  
+* cloud-opta-debian-packages: Same as above, but used for instances when the NetQ agent needs to be manually installed from a package  
 
 See the Readme in each branch for instructions on each branch.
 
