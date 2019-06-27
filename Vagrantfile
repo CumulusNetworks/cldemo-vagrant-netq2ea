@@ -117,7 +117,7 @@ Vagrant.configure("2") do |config|
     
     device.vm.hostname = "oob-mgmt-server" 
     
-    device.vm.box = "cumulus/tscloud220rc1"
+    device.vm.box = "cumulus/tscloud220rc2"
 
     device.vm.provider :libvirt do |v|
       v.memory = 8192
