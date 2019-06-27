@@ -102,7 +102,7 @@ Vagrant.configure("2") do |config|
   wbid = 14
   offset = wbid * 100
   #guiport = wbid + 8000
-  netq_version = "220rc1"
+  netq_version = "220rc2"
 
   config.vm.provider :libvirt do |domain|
     domain.management_network_address = "10.255.#{wbid}.0/24"
@@ -145,7 +145,7 @@ Vagrant.configure("2") do |config|
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
     #Copy the tarball onto /mnt/installables
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/NetQ-2.2.0-SNAPSHOT-opta.tgz", destination: "NetQ-2.2.0-SNAPSHOT-opta.tgz"
+    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/NetQ-2.2.0-opta.tgz", destination: "NetQ-2.2.0-opta.tgz"
     config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
     config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 

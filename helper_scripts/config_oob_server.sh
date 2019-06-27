@@ -315,7 +315,7 @@ chmod 777 /var/www/html/license.lic
 
 echo " ### Move Cloud-Opta Tarball to /mnt/installables ###"
 mkdir /mnt/installables
-mv NetQ-2.2.0-SNAPSHOT-opta.tgz /mnt/installables/NetQ-2.2.0-SNAPSHOT-opta.tgz
+mv NetQ-2.2.0-opta.tgz /mnt/installables/NetQ-2.2.0-opta.tgz
 
 
 echo " ### Pushing ZTP Script ###"
