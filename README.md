@@ -8,7 +8,7 @@ This is a repo to use a cloud-opta box in place of oob-mgmt-server.
 Prerequisites:
 * Clone `git clone -b cloud-opta https://github.com/CumulusNetworks/cldemo-vagrant-netq2ea.git`
 * Download the NetQ 2.x libvirt.box file
-* Add the box to vagrant: `vagrant box add cumulus-netq-server-2.0.2-ts-amd64-libvirt.box --name=cumulus/ts202`
+* Add the box to vagrant: `vagrant box add cumulus-netq-server-2.2.0-tscloud-amd64-libvirt.box --name=cumulus/ts202`
 
 Using:
 1) cd to the directory from the git clone 
