@@ -315,7 +315,7 @@ chmod 777 /var/www/html/license.lic
 
 echo " ### Move Cloud-Opta Tarball to /mnt/installables ###"
 #mkdir /mnt/installables
-mv NetQ-2.2.0-opta.tgz /mnt/installables/NetQ-2.2.0-opta.tgz
+mv NetQ-2.* /mnt/installables/
 
 
 echo " ### Pushing ZTP Script ###"
@@ -350,7 +350,7 @@ sudo apt -y purge cumulus-netq netq-agent netq-apps python-netq-lib
 
 ping 8.8.8.8 -c2
 if [ "\$?" == "0" ]; then
-  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.1" > /etc/apt/sources.list.d/netq.list
+  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.2" > /etc/apt/sources.list.d/netq.list
   apt-get update -qy
   apt-get install ntpdate -qy
 fi
