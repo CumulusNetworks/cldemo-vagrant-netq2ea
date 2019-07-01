@@ -22,7 +22,7 @@ Using:
 
 5) Add CLI server to OPTA and network devices
 
-`netq config add cli server api.netq.cumulusnetworks.com access-key <access-key-of-the-user> secret-key  <secret-key-of-the-user>`
+`netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key>`
 `netq config restart cli`
 
 
