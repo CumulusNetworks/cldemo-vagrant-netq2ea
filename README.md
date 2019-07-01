@@ -1,8 +1,6 @@
 # Cumulus Linux Demo Framework Fork for NetQ2.x
 # Cloud OPTA Branch
 
-![Reference Topology](./documentation/cldemo_topology.png "Reference Topology")
-
 This is a repo to use a cloud-opta box in place of oob-mgmt-server.
 
 Prerequisites:
