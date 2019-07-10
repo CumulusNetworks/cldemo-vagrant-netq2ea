@@ -25,9 +25,9 @@ Using:
 
 6) Provision cldemo-evpn-symmetric demo to populate NetQ data. We have to `cd ~/cldemo-evpn-symmetric`
 7) Then run the playbook `ansible-playbook run_demo.yml`
-8) After the playbook completes its run, you can launch the GUI. It will take several minutes for data to populate. It's usually easier to check that agents are showing as registered using the CLI as it tends to indicate earlier than the GUI.
+8) After the playbook completes its run, you can launch the GUI at https://netq.cumulusnetworks.com It will take several minutes for data to populate. It's usually easier to check that agents are showing as registered using the CLI as it tends to indicate earlier than the GUI.
 
-Once you do all this, you are running the cldemo-evpn-symmetric demo with Netq2.x.
+Once you do all this, you are running the cldemo-evpn-symmetric demo with Netq2.x. Have fun.
 
 ---
 
