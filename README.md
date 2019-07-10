@@ -24,11 +24,11 @@ Using:
 `netq config restart cli`
 
 
-6) Provision cldemo-evpn-symmetric demo to populate NetQ data. `cd ~/cldemo-evpn-symmetric`
-7) Run the playbook `ansible-playbook run_demo.yml`
-8) Launch the GUI. It will take several minutes for data to populate in GUI. Check data on CLI.
+6) Provision cldemo-evpn-symmetric demo to populate NetQ data. We have to `cd ~/cldemo-evpn-symmetric`
+7) Then run the playbook `ansible-playbook run_demo.yml`
+8) After the playbook completes its run, you can launch the GUI. It will take several minutes for data to populate. It's usually easier to check that agents are showing as registered using the CLI as it tends to indicate earlier than the GUI.
 
-Once you do all this, you are running the cldemo-evpn-symmetric demo with Netq2.x. The agents are all configured and registered with the telemetry server.  In other words, that should be it. All the cards/features should light up BGP, EVPN, LLDP, CLAG
+Once you do all this, you are running the cldemo-evpn-symmetric demo with Netq2.x.
 
 ---
 
