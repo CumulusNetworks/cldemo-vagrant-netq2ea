@@ -18,11 +18,10 @@ Using:
 - this step takes a few mins
 - config-key should be recieved from onboarding with cloud server
 
-5) Add CLI server to OPTA and network devices
+5) Add CLI server to OPTA (and optionally, the network devices. Please see mgmt vrf workaround for network devices)
 
 `netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key>`
 `netq config restart cli`
-
 
 6) Provision cldemo-evpn-symmetric demo to populate NetQ data. We have to `cd ~/cldemo-evpn-symmetric`
 7) Then run the playbook `ansible-playbook run_demo.yml`
