@@ -379,6 +379,11 @@ systemctl stop ntp.service
 systemctl disable ntp.service
 systemctl start ntp@mgmt  
 
+systemctl stop netqd
+systemctl disable netqd
+systemctl enable netqd@mgmt
+systemctl restart netqd@mgmt
+
 nohup bash -c 'sleep 2; shutdown now -r "Rebooting to Complete ZTP"' &
 exit 0
 #CUMULUS-AUTOPROVISIONING
