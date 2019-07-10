@@ -1,7 +1,7 @@
 # Cumulus Linux Demo Framework Fork for NetQ2.x
 # Cloud OPTA Branch
 
-This is a repo to use a cloud-opta box in place of oob-mgmt-server.
+This is a repo to use a cloud-opta box in place of oob-mgmt-server in a cldemo-vagrant reference topology.
 
 Prerequisites:
 * Clone `git clone -b cloud-opta https://github.com/CumulusNetworks/cldemo-vagrant-netq2ea.git`
@@ -28,6 +28,8 @@ Using:
 8) After the playbook completes its run, you can launch the GUI at https://netq.cumulusnetworks.com It will take several minutes for data to populate. It's usually easier to check that agents are showing as registered using the CLI as it tends to indicate earlier than the GUI.
 
 Once you do all this, you are running the cldemo-evpn-symmetric demo with Netq2.x. Have fun.
+
+To destroy the simulation `vagrant destroy -f`, then go back to step #2 to restart.
 
 ---
 
