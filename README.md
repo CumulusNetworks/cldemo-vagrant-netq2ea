@@ -1,7 +1,7 @@
 # Cumulus Linux Demo Framework Fork for NetQ2.x
 # Cloud OPTA Branch
 
-This is a repo to use a cloud-opta box in place of oob-mgmt-server in a cldemo-vagrant reference topology.
+This is a repo to use a cloud-opta box in place of oob-mgmt-server in a [cldemo-vagrant reference topology](https://github.com/CumulusNetworks/cldemo-vagrant).
 
 Prerequisites:
 * Clone `git clone -b cloud-opta https://github.com/CumulusNetworks/cldemo-vagrant-netq2ea.git`
