@@ -20,7 +20,7 @@ Using:
 
 5) Add CLI server to OPTA (and optionally, the network devices)
 
-`netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key>`
+`netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key>`  
 `netq config restart cli`
 
 For network devices (leafs, spines, exit), you'll need to include `vrf mgmt` at the end of the `netq config add cli server` command:
