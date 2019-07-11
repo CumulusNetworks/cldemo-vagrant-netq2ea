@@ -23,7 +23,11 @@ Using:
 `netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key>`
 `netq config restart cli`
 
-6) Provision cldemo-evpn-symmetric demo to populate NetQ data. We have to `cd ~/cldemo-evpn-symmetric`
+For network devices (leafs, spines, exit), you'll need to include `vrf mgmt` at the end of the add cli server command:
+
+`netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key> vrf mgmt`
+
+6) Provision cldemo-evpn-symmetric demo. We have to `cd ~/cldemo-evpn-symmetric`
 7) Then run the playbook `ansible-playbook run_demo.yml`
 8) After the playbook completes its run, you can launch the GUI at https://netq.cumulusnetworks.com It will take several minutes for data to populate. It's usually easier to check that agents are showing as registered using the CLI as it tends to indicate earlier than the GUI.
 
