@@ -23,9 +23,10 @@ Using:
 `netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key>`
 `netq config restart cli`
 
-For network devices (leafs, spines, exit), you'll need to include `vrf mgmt` at the end of the add cli server command:
+For network devices (leafs, spines, exit), you'll need to include `vrf mgmt` at the end of the `netq config add cli server` command:
 
 `netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key> vrf mgmt`
+`netq config restart cli`
 
 6) Provision cldemo-evpn-symmetric demo. We have to `cd ~/cldemo-evpn-symmetric`
 7) Then run the playbook `ansible-playbook run_demo.yml`
