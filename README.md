@@ -6,7 +6,7 @@ This is a repo to use a cloud-opta box in place of oob-mgmt-server in a [cldemo-
 Prerequisites:
 * Clone `git clone -b cloud-opta https://github.com/CumulusNetworks/cldemo-vagrant-netq2ea.git`
 * Download the NetQ 2.x libvirt.box file
-* Add the box to vagrant: `vagrant box add cumulus-netq-server-2.2.0-tscloud-amd64-libvirt.box --name=cumulus/ts220`
+* Add the box to vagrant: `vagrant box add cumulus-netq-server-2.2.1-tscloud-amd64-libvirt.box --name=cumulus/ts221`
 
 Using:
 1) cd to the directory from the git clone 
@@ -14,18 +14,18 @@ Using:
 3) `vagrant ssh oob-mgmt-server`
 4) Once in the oob-mgmt-server, install the OPTA: (the .tgz is already on the box) 
 
-`netq install opta interface eth0 tarball NetQ-2.2.0-opta.tgz key <config-key>`
+`netq install opta interface eth0 tarball NetQ-2.2.1-opta.tgz config-key <config-key>`
 - this step takes a few mins
 - config-key should be recieved from onboarding with cloud server
 
 5) Add CLI server to OPTA (and optionally, the network devices)
 
-`netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key>`  
+`netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key <secret-key>`  
 `netq config restart cli`
 
 For network devices (leafs, spines, exit), you'll need to include `vrf mgmt` at the end of the `netq config add cli server` command:
 
-`netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key  <secret-key> vrf mgmt`  
+`netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key <secret-key> vrf mgmt`  
 `netq config restart cli`
 
 6) Provision the [cldemo-evpn-symmetric](https://github.com/CumulusNetworks/cldemo-evpn-symmetric) demo. We have to `cd ~/cldemo-evpn-symmetric`
