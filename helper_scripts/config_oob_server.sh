@@ -81,7 +81,7 @@ restrict 127.0.0.1
 restrict ::1
 
 # Specify interfaces, don't listen on switch ports
-interface listen eth1
+#interface listen eth1
 EOT
 
 
@@ -433,12 +433,16 @@ systemctl restart ntp.service
 echo " ### Install PAT rule in iptables for outbound access via oob-mgmt ###"
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE # install rule now
 # also put in rc.local so it adds the rule on reboot
-echo "!/bin/sh -e" >/etc/rc.local
+echo "#!/bin/sh -e" >/etc/rc.local
 echo " " >>/etc/rc.local
 echo "iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE" >>/etc/rc.local
 echo "exit 0" >>/etc/rc.local
 
-
 echo "############################################"
 echo "      DONE!"
 echo "############################################"
+
+#reboot to get rid of kernel error now that we
+#should be able to remove this once CM-25801 is resolved
+echo "rebooting..."
+reboot

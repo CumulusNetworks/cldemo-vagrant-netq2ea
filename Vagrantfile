@@ -99,12 +99,12 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  wbid = 14
+  wbid = 16
   offset = wbid * 100
   #guiport = wbid + 8000
   
   #this maps to a folder name on the server
-  netq_version = "220-release"
+  netq_version = "221-release"
 
   config.vm.provider :libvirt do |domain|
     domain.management_network_address = "10.255.#{wbid}.0/24"
@@ -119,7 +119,7 @@ Vagrant.configure("2") do |config|
     
     device.vm.hostname = "oob-mgmt-server" 
     
-    device.vm.box = "cumulus/tscloud220"
+    device.vm.box = "cumulus/tscloud221"
 
     device.vm.provider :libvirt do |v|
       v.memory = 8192
@@ -145,7 +145,7 @@ Vagrant.configure("2") do |config|
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
     #Copy the tarball onto /mnt/installables
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/NetQ-2.2.0-opta.tgz", destination: "NetQ-2.2.0-opta.tgz"
+    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/NetQ-2.2.1-opta.tgz", destination: "NetQ-2.2.1-opta.tgz"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -159,7 +159,7 @@ end
     device.vm.hostname = "oob-mgmt-switch" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -417,7 +417,7 @@ end
     device.vm.hostname = "exit02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -621,7 +621,7 @@ end
     device.vm.hostname = "exit01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -825,7 +825,7 @@ end
     device.vm.hostname = "spine02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1001,7 +1001,7 @@ end
     device.vm.hostname = "spine01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1177,7 +1177,7 @@ end
     device.vm.hostname = "leaf04" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1381,7 +1381,7 @@ end
     device.vm.hostname = "leaf02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1585,7 +1585,7 @@ end
     device.vm.hostname = "leaf03" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1789,7 +1789,7 @@ end
     device.vm.hostname = "leaf01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -2467,7 +2467,7 @@ end
     device.vm.hostname = "internet" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.6"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
