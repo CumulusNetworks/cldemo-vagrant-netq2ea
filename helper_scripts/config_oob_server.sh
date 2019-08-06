@@ -8,6 +8,13 @@ echo " Detected vagrant user is: $username"
 
 sudo su
 
+###########################################
+echo " ### 3.7.7 workaround for CM-25801"
+sed -i -s 's/PrivateNetwork=yes/#PrivateNetwork=yes/' /lib/systemd/system/systemd-hostnamed.service 
+systemctl daemon-reload
+hostnamectl set-hostname oob-mgmt-server
+##########################################
+
 #fix the red 'dpkg-reconfigure: unable to re-open stdin: No file or directory' from apt-get stuff
 export DEBIAN_FRONTEND=noninteractive
 
@@ -368,7 +375,9 @@ netq config restart cli
 
 systemctl stop ntp.service
 systemctl disable ntp.service
+systemctl enable ntp@mgmt
 systemctl start ntp@mgmt  
+
 
 nohup bash -c 'sleep 2; shutdown now -r "Rebooting to Complete ZTP"' &
 exit 0

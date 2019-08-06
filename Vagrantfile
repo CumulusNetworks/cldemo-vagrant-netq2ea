@@ -99,7 +99,7 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  wbid = 1
+  wbid = 5
   offset = wbid * 100
   guiport = wbid + 8000
 
@@ -116,7 +116,7 @@ Vagrant.configure("2") do |config|
   ##### DEFINE VM for oob-mgmt-server #####
   config.vm.define "oob-mgmt-server" do |device|
 
-    device.vm.hostname = "oob-mgmt-server"
+    #device.vm.hostname = "oob-mgmt-server"
 
     device.vm.box = "cumulus/ts221"
 
