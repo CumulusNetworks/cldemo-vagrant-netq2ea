@@ -99,7 +99,7 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  wbid = 5
+  wbid = 1
   offset = wbid * 100
   guiport = wbid + 8000
 
@@ -111,14 +111,12 @@ Vagrant.configure("2") do |config|
   end
 
 
-
-
   ##### DEFINE VM for oob-mgmt-server #####
   config.vm.define "oob-mgmt-server" do |device|
 
     #device.vm.hostname = "oob-mgmt-server"
 
-    device.vm.box = "cumulus/ts221"
+    device.vm.box = "cumulus/ts222rc1"
 
     device.vm.provider :libvirt do |v|
       v.memory = 65536
