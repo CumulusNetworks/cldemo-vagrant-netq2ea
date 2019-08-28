@@ -312,11 +312,6 @@ echo " ### Pushing Fake License ###"
 echo "this is a fake license" > /var/www/html/license.lic
 chmod 777 /var/www/html/license.lic
 
-
-echo " ### Move Cloud-Opta Tarball to /mnt/installables ###"
-mv NetQ-2.* /mnt/installables/
-
-
 echo " ### Pushing ZTP Script ###"
 cat << EOT > /var/www/html/ztp_oob.sh
 #!/bin/bash
@@ -441,8 +436,3 @@ echo "exit 0" >>/etc/rc.local
 echo "############################################"
 echo "      DONE!"
 echo "############################################"
-
-#reboot to get rid of kernel error now that we
-#should be able to remove this once CM-25801 is resolved
-echo "rebooting..."
-reboot
