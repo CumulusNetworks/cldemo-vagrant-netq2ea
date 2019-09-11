@@ -18,11 +18,11 @@ Notes:
 Prerequisites:
 * Clone `git clone https://github.com/CumulusNetworks/cldemo-vagrant-netq2ea.git`
 * Download the NetQ 2.x libvirt.box file
-* Add the image to vagrant: `vagrant box add cumulus-netq-server-2.2.0-ts-amd64-libvirt.box --name=cumulus/ts220`
+* Add the image to vagrant: `vagrant box add cumulus-netq-server-2.2.2-ts-amd64-libvirt.box --name=cumulus/ts222`
 
 Using:
 1) cd to `cldemo-vagrant-netq2ea` folder (or where you cloned to) 
-2) `vagrant up oob-mgmt-server oob-mgmt-switch`
+2) `vagrant up oob-mgmt-server && vagrant up oob-mgmt-switch`
 3) `vagrant up`
 4) `vagrant ssh oob-mgmt-server`
 5) Once in the oob-mgmt-server, the cldemo-evpn-symmetric demo is in the home dir. `cd cldemo-evpn-symmetric`
