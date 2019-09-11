@@ -364,11 +364,8 @@ echo "    address 127.0.0.1/8" >>/etc/network/interfaces
 echo "    vrf-table auto" >>/etc/network/interfaces
 
 netq config add agent server 192.168.0.254 vrf mgmt
-#This add cli below has to get added manually, we'll just do an ad-hoc ansible command for now.
-#netq config add cli server api.tb1.netqdev.cumulusnetworks.com access-key
 
 netq config restart agent
-#netq config restart cli
 
 systemctl stop ntp.service
 systemctl disable ntp.service
