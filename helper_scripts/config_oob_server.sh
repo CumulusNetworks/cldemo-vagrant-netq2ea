@@ -312,12 +312,6 @@ echo " ### Pushing Fake License ###"
 echo "this is a fake license" > /var/www/html/license.lic
 chmod 777 /var/www/html/license.lic
 
-
-echo " ### Move Cloud-Opta Tarball to /mnt/installables ###"
-#mkdir /mnt/installables
-mv NetQ-2.* /mnt/installables/
-
-
 echo " ### Pushing ZTP Script ###"
 cat << EOT > /var/www/html/ztp_oob.sh
 #!/bin/bash
@@ -372,14 +366,12 @@ echo "    address 127.0.0.1/8" >>/etc/network/interfaces
 echo "    vrf-table auto" >>/etc/network/interfaces
 
 netq config add agent server 192.168.0.254 vrf mgmt
-#This add cli below has to get added manually, we'll just do an ad-hoc ansible command for now.
-#netq config add cli server api.tb1.netqdev.cumulusnetworks.com access-key
 
 netq config restart agent
-#netq config restart cli
 
 systemctl stop ntp.service
 systemctl disable ntp.service
+systemctl enable ntp@mgmt
 systemctl start ntp@mgmt  
 
 nohup bash -c 'sleep 2; shutdown now -r "Rebooting to Complete ZTP"' &
@@ -387,8 +379,13 @@ exit 0
 #CUMULUS-AUTOPROVISIONING
 EOT
 
+echo "Set login as cumulus user"
 echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
 echo "exit" >> /home/vagrant/.bash_profile
+
+echo "Modifying /etc/app-release to pull EA tarball version"
+sed -i -e 's/APPLIANCE_VERSION=.*/APPLIANCE_VERSION=2.3.0-SNAPSHOT/' /etc/app-release
+
 
 echo " ### Clone Repo ###"
 git clone https://github.com/CumulusNetworks/cldemo-evpn-symmetric /home/cumulus/cldemo-evpn-symmetric  > /dev/null 2>&1
