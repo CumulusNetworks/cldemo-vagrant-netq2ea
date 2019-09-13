@@ -45,7 +45,7 @@ dpkg -i /home/vagrant/netq-agent_ubuntu.deb
 dpkg -i /home/vagrant/netq-apps_ubuntu.deb
 
 echo "Configuring NetQ agent"
-netq config add agent server 192.168.200.250
+netq config add agent server 192.168.0.254
 netq config restart agent
 
 echo "Configure etc/network/interfaces"
