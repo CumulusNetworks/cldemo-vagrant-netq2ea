@@ -1,6 +1,7 @@
 # NetQ SaaS (Cloud) EA server support
 Built On Packet.net m2.xlarge Ubuntu 16.04 server
-![Reference Topology](./documentation/cldemo_topology.png "Reference Topology")
+
+This branch is meant to support the EA NetQ SaaS server. To support this, we need to use custom EA agents that aren't on the repo right now.
 
 Prerequisites:
 * watch-dropbox.sh is installed as a cron job that runs every minute
