@@ -92,10 +92,11 @@ echo "Virtual network adapter speed/duplex hackery"
 ethtool -s eth1 speed 100 duplex full autoneg off
 ethtool -s eth2 speed 100 duplex full autoneg off
 echo "#!/bin/bash" >/etc/rc.local
-echo "/sbin/ethtool -s eth1 speed 100 duplex full autoneg off" >>/etc/rc.local
-echo "/sbin/ethtool -s eth2 speed 100 duplex full autoneg off" >>/etc/rc.local
+echo "ethtool -s eth1 speed 100 duplex full autoneg off" >>/etc/rc.local
+echo "ethtool -s eth2 speed 100 duplex full autoneg off" >>/etc/rc.local
 echo "sudo systemctl restart networking" >>/etc/rc.local
 echo "exit 0" >>/etc/rc.local
+chmod 755 /etc/rc.local
 
 #add cronjob to ping and send traffic for bridge learning
 echo "* * * * * root /bin/ping -q -c 4 10.0.0.253" >>/etc/crontab
