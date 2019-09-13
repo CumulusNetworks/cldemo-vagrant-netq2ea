@@ -1,0 +1,15 @@
+{
+  "name": "cumulus/tscloud-ea",
+  "description": "NetQ Cloud OPTA Base OS",
+  "versions": [
+    {
+      "version": "2.3.0.1",
+      "providers": [
+        {
+          "name": "libvirt",
+          "url": "file:///mnt/nvme/netq_releases/222-release/cumulus-netq-server-2.2.2-tscloud-amd64-libvirt.box"
+        }
+      ]
+    }
+  ]
+}
