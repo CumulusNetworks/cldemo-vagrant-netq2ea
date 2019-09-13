@@ -3,6 +3,12 @@ Built On Packet.net m2.xlarge Ubuntu 16.04 server
 ![Reference Topology](./documentation/cldemo_topology.png "Reference Topology")
 
 Prerequisites:
+* watch-dropbox.sh is installed as a cron job that runs every minute
+
+`* * * * * /usr/bin/watch-dropbox.sh`
+
+Upload EA client deb packages to /mnt/nvme/engineering-dropbox: They will be automatically moved into the correct directory with the correct name (as is defined in Vagrantfile) for the `vagrant up`
+
 * The base OS box for the NetQ cloud will always be `device.vm.box = "cumulus/tscloud-ea"`
 Use the included json file to add new boxes with different versions.
 We may not always get an updated cloud opta base OS for EA. The base OS box kind of doesn't matter. If in doubt, use the most recent offical release of the base OS.
