@@ -10,8 +10,19 @@ export DEBIAN_FRONTEND=noninteractive
 useradd cumulus -m -s /bin/bash
 echo "cumulus:CumulusLinux!" | chpasswd
 echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
+sed "s/PasswordAuthentication no/PasswordAuthentication yes/" -i /etc/ssh/sshd_config
 
-timedatectl set-ntp false
+## Convenience code. This is normally done in ZTP.
+echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
+mkdir /home/cumulus/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzH+R+UhjVicUtI0daNUcedYhfvgT1dbZXgY33Ibm4MOo+X84Iwuzirm3QFnYf2O3uyZjNyrA6fj9qFE7Ekul4bD6PCstQupXPwfPMjns2M7tkHsKnLYjNxWNql/rCUxoH2B6nPyztcRCass3lIc2clfXkCY9Jtf7kgC2e/dmchywPV5PrFqtlHgZUnyoPyWBH7OjPLVxYwtCJn96sFkrjaG9QDOeoeiNvcGlk4DJp/g9L4f2AaEq69x8+gBTFUqAFsD8ecO941cM8sa1167rsRPx7SK3270Ji5EUF3lZsgpaiIgMhtIB/7QNTkN9ZjQBazxxlNVN6WthF8okb7OSt" >> /home/cumulus/.ssh/authorized_keys
+chmod 700 -R /home/cumulus
+chown -R cumulus:cumulus /home/cumulus
+chmod 600 /home/cumulus/.ssh/*
+chmod 700 /home/cumulus/.ssh
+
+echo "Add bonding module"
+echo "bonding" >> /etc/modules
 
 #echo "Add Cumulus Apps Pubkey"
 #wget -q -O- https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey | apt-key add - 2>&1
@@ -21,7 +32,7 @@ timedatectl set-ntp false
 
 #Install LLDP & NTP
 echo "Installing LLDP NTP & Python"
-apt-get update -qy && apt-get install lldpd ntp ntpdate python -qy
+apt-get update -qy && apt-get install lldpd ntp ntpdate python ifenslave -qy
 #apt-get install cumulus-netq -qy
 echo "configure lldp portidsubtype ifname" > /etc/lldpd.d/port_info.conf
 
@@ -52,12 +63,8 @@ echo -e "iface eth0 inet dhcp\n\n" >> /etc/network/interfaces.d/eth0.cfg
 echo "retry 1;" >> /etc/dhcp/dhclient.conf
 echo "timeout 600;" >> /etc/dhcp/dhclient.conf
 
-#Setup SSH key authentication for Ansible
-echo -e "post-up mkdir -p /home/cumulus/.ssh" >> /etc/network/interfaces.d/eth0.cfg
-echo -e "post-up wget -O /home/cumulus/.ssh/authorized_keys http://192.168.200.1/authorized_keys" >> /etc/network/interfaces.d/eth0.cfg
-echo -e "post-up chown -R cumulus:cumulus /home/cumulus/.ssh" >> /etc/network/interfaces.d/eth0.cfg
-
 echo "Configure NTP"
+timedatectl set-ntp false
 # Write NTP Configuration
 cat << EOT > /etc/ntp.conf
 # /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
@@ -80,6 +87,15 @@ EOT
 echo "Enable and start NTP"
 /lib/systemd/systemd-sysv-install enable ntp
 systemctl start ntp.service
+
+echo "Virtual network adapter speed/duplex hackery"
+ethtool -s eth1 speed 100 duplex full autoneg off
+ethtool -s eth2 speed 100 duplex full autoneg off
+echo "#!/bin/bash" >/etc/rc.local
+echo "/sbin/ethtool -s eth1 speed 100 duplex full autoneg off" >>/etc/rc.local
+echo "/sbin/ethtool -s eth2 speed 100 duplex full autoneg off" >>/etc/rc.local
+echo "sudo systemctl restart networking" >>/etc/rc.local
+echo "exit 0" >>/etc/rc.local
 
 #add cronjob to ping and send traffic for bridge learning
 echo "* * * * * root /bin/ping -q -c 4 10.0.0.253" >>/etc/crontab
