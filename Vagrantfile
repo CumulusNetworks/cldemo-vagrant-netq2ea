@@ -99,8 +99,8 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  wbid = 6
-  offset = wbid * 3000
+  wbid = 8
+  offset = wbid * 2000
 
   config.vm.provider :libvirt do |domain|
     domain.management_network_address = "10.255.#{wbid}.0/24"
@@ -116,6 +116,7 @@ Vagrant.configure("2") do |config|
     device.vm.hostname = "oob-mgmt-server" 
     
     device.vm.box = "cumulus/tscloud-ea"
+    device.vm.box_version = "2.3.0"
 
     device.vm.provider :libvirt do |v|
       v.memory = 8192
