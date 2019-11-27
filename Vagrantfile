@@ -35,34 +35,59 @@ unless Vagrant::DEFAULT_SERVER_URL.frozen?
 end
 
 $script = <<-SCRIPT
+function setup_ztp(){
+    echo "### Disabling ZTP service..."
+    systemctl stop ztp.service
+    ztp -d 2>&1
+    echo "### Resetting ZTP to work next boot..."
+    ztp -R 2>&1
+    ztp -i &> /dev/null
+
+    if [ -e /tmp/cumulus-ztp ]; then
+        echo "  ### Found ZTP Script, moving into preload directory... ###"
+        mv /tmp/cumulus-ztp /var/lib/cumulus/ztp/cumulus-ztp
+        chmod +x /var/lib/cumulus/ztp/cumulus-ztp
+        ls -lha /var/lib/cumulus/ztp/cumulus-ztp
+    fi
+}
+
+function disable_remap(){
+    echo "### Disabling default remap on Cumulus VX..."
+    mv -v /etc/hw_init.d/S10rename_eth_swp.sh /etc/S10rename_eth_swp.sh.backup &> /dev/null
+}
+
+function vagrant_user_nclu(){
+    echo "### Giving Vagrant User Ability to Run NCLU Commands ###"
+    adduser vagrant netedit
+    adduser vagrant netshow
+}
+
 if grep -q -i 'cumulus' /etc/lsb-release &> /dev/null; then
     echo "### RUNNING CUMULUS EXTRA CONFIG ###"
     source /etc/lsb-release
-    if [ -z /etc/app-release ]; then
+    echo "  INFO: Detected Cumulus Linux v$DISTRIB_RELEASE Release"
+    if [ -e /etc/app-release ]; then
         echo "  INFO: Detected NetQ TS Server"
         source /etc/app-release
         echo "  INFO: Running NetQ TS Appliance Version $APPLIANCE_VERSION"
+        disable_remap
+        vagrant_user_nclu
+        setup_ztp
     else
         if [[ $DISTRIB_RELEASE =~ ^2.* ]]; then
             echo "  INFO: Detected a 2.5.x Based Release"
-
-            echo "  adding fake cl-acltool..."
+            echo "     2.5.x: adding fake cl-acltool..."
             echo -e "#!/bin/bash\nexit 0" > /usr/bin/cl-acltool
             chmod 755 /usr/bin/cl-acltool
-
-            echo "  adding fake cl-license..."
+            echo "     2.5.x: adding fake cl-license..."
             echo -e "#!/bin/bash\nexit 0" > /usr/bin/cl-license
             chmod 755 /usr/bin/cl-license
-
-            echo "  Disabling default remap on Cumulus VX..."
+            echo "     2.5.x: Disabling default remap on Cumulus VX..."
             mv -v /etc/init.d/rename_eth_swp /etc/init.d/rename_eth_swp.backup
-
-            echo "### Rebooting to Apply Remap..."
         elif [[ $DISTRIB_RELEASE =~ ^3.* ]]; then
             echo "  INFO: Detected a 3.x Based Release ($DISTRIB_RELEASE)"
             echo "### Disabling default remap on Cumulus VX..."
             mv -v /etc/hw_init.d/S10rename_eth_swp.sh /etc/S10rename_eth_swp.sh.backup &> /dev/null
-            echo "  INFO: Detected Cumulus Linux v$DISTRIB_RELEASE Release"
             if [[ $DISTRIB_RELEASE =~ ^3.[1-9].* ]]; then
                 echo "### Fixing ONIE DHCP to avoid Vagrant Interface ###"
                 echo "     Note: Installing from ONIE will undo these changes."
@@ -79,16 +104,14 @@ if grep -q -i 'cumulus' /etc/lsb-release &> /dev/null; then
                     sed -i 's/users_with_show = root, cumulus/users_with_show = root, cumulus, vagrant/g' /etc/netd.conf
                 fi
             elif [[ $DISTRIB_RELEASE =~ ^3.[3-9].* ]]; then
-                echo "### Giving Vagrant User Ability to Run NCLU Commands ###"
-                adduser vagrant netedit
-                adduser vagrant netshow
+                vagrant_user_nclu
             fi
-            echo "### Disabling ZTP service..."
-            systemctl stop ztp.service
-            ztp -d 2>&1
-            echo "### Resetting ZTP to work next boot..."
-            ztp -R 2>&1
-            ztp -i 2>&1
+            setup_ztp
+        elif [[ $DISTRIB_RELEASE =~ ^4.* ]]; then
+            echo "  INFO: Detected a 4.x Based Release ($DISTRIB_RELEASE)"
+            disable_remap
+            vagrant_user_nclu
+            setup_ztp
         fi
     fi
 fi
@@ -96,6 +119,7 @@ echo "### DONE ###"
 echo "### Rebooting Device to Apply Remap..."
 nohup bash -c 'sleep 10; shutdown now -r "Rebooting to Remap Interfaces"' &
 SCRIPT
+
 
 Vagrant.configure("2") do |config|
 
