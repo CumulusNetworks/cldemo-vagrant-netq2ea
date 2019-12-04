@@ -384,7 +384,7 @@ echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
 echo "exit" >> /home/vagrant/.bash_profile
 
 echo "Modifying /etc/app-release to pull EA tarball version"
-sed -i -e 's/APPLIANCE_VERSION=.*/APPLIANCE_VERSION=2.3.1-SNAPSHOT/' /etc/app-release
+sed -i -e 's/APPLIANCE_VERSION=.*/APPLIANCE_VERSION=2.4.0-SNAPSHOT/' /etc/app-release
 
 
 echo " ### Clone Repo ###"
