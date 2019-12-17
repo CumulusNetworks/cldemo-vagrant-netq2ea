@@ -21,7 +21,7 @@ iface eth0 inet dhcp
     alias Connects (via NAT) To the Internet
 
 auto eth1
-iface eth1
+iface eth1 inet static
     alias Faces the Internal Management Network
     address 192.168.0.254/24
 
@@ -29,13 +29,14 @@ EOT
 
 ifup eth1
 
-echo " ### Adding Repos ###"
-sh -c 'echo "deb http://deb.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb-src http://deb.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list.d/jessie.list'
-apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 >/dev/null 2>&1
+#echo " ### Adding Repos ###"
+#sh -c 'echo "deb http://deb.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list'
+#sh -c 'echo "deb-src http://deb.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
+#sh -c 'echo "deb http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
+#sh -c 'echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
+#sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list.d/jessie.list'
+#apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 >/dev/null 2>&1
+apt-add-repository -y ppa:ansible/ansible
 
 apt-get update
 
@@ -50,10 +51,20 @@ pip install --upgrade six
 pip install --upgrade PyYAML
 
 echo " ### Install Ansible ###"
-apt-get install -yq -t trusty ansible
+apt-get install -yq ansible
 
 echo " ### Install Apache ###"
 apt-get install -yq apache2
+
+echo " ### Install DHCP Server ###"
+apt-get install -yq isc-dhcp-server
+
+echo " ### Install dnsmasq ###"
+apt-get install -yq dnsmasq
+
+echo " ### Install NTP ###"
+timedatectl set-ntp false
+apt-get install -yq ntp
 
 echo " ### Write /etc/ntp.conf ###"
 cat << EOT > /etc/ntp.conf
@@ -231,8 +242,8 @@ group {
 EOT
 
 chmod 755 -R /etc/dhcp/*
-systemctl enable dhcpd > /dev/null 2>&1
-systemctl restart dhcpd
+systemctl enable isc-dhcp-server > /dev/null 2>&1
+systemctl restart isc-dhcp-server
 
 echo " ### Push Hosts File ###"
 cat << EOT > /etc/hosts
@@ -383,8 +394,8 @@ echo "Set login as cumulus user"
 echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
 echo "exit" >> /home/vagrant/.bash_profile
 
-echo "Modifying /etc/app-release to pull EA tarball version"
-sed -i -e 's/APPLIANCE_VERSION=.*/APPLIANCE_VERSION=2.4.0-SNAPSHOT/' /etc/app-release
+#echo "Modifying /etc/app-release to pull EA tarball version"
+#sed -i -e 's/APPLIANCE_VERSION=.*/APPLIANCE_VERSION=2.4.0-SNAPSHOT/' /etc/app-release
 
 
 echo " ### Clone Repo ###"
