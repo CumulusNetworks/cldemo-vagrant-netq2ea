@@ -29,13 +29,6 @@ EOT
 
 ifup eth1
 
-#echo " ### Adding Repos ###"
-#sh -c 'echo "deb http://deb.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list'
-#sh -c 'echo "deb-src http://deb.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-#sh -c 'echo "deb http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-#sh -c 'echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-#sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list.d/jessie.list'
-#apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 >/dev/null 2>&1
 apt-add-repository -y ppa:ansible/ansible
 
 apt-get update
@@ -46,9 +39,9 @@ apt-get install -yq git
 echo " ### Install pip ###"
 apt-get install -yq python-pip
 
-echo " ### janky cloud-opta fixes"
-pip install --upgrade six
-pip install --upgrade PyYAML
+#echo " ### janky cloud-opta fixes"
+#pip install --upgrade six
+#pip install --upgrade PyYAML
 
 echo " ### Install Ansible ###"
 apt-get install -yq ansible
@@ -62,39 +55,59 @@ apt-get install -yq isc-dhcp-server
 echo " ### Install dnsmasq ###"
 apt-get install -yq dnsmasq
 
-echo " ### Install NTP ###"
-timedatectl set-ntp false
-apt-get install -yq ntp
+#using chrony for time sync with NetQ 2.4 on Ubuntu 18.04
+mkdir /etc/chrony
+echo " ### Write /etc/chrony/chrony.conf ###"
+cat << EOT > /etc/chrony/chrony.conf
+# Welcome to the chrony configuration file. See chrony.conf(5) for more
+# information about usuable directives.
 
-echo " ### Write /etc/ntp.conf ###"
-cat << EOT > /etc/ntp.conf
-# /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
+# This will use (up to):
+# - 4 sources from ntp.ubuntu.com which some are ipv6 enabled
+# - 2 sources from 2.ubuntu.pool.ntp.org which is ipv6 enabled as well
+# - 1 source from [01].ubuntu.pool.ntp.org each (ipv4 only atm)
+# This means by default, up to 6 dual-stack and up to 2 additional IPv4-only
+# sources will be used.
+# At the same time it retains some protection against one of the entries being
+# down (compare to just using one of the lines). See (LP: #1754358) for the
+# discussion.
+#
+# About using servers from the NTP Pool Project in general see (LP: #104525).
+# Approved by Ubuntu Technical Board on 2011-02-08.
+# See http://www.pool.ntp.org/join.html for more information.
+pool ntp.ubuntu.com        iburst maxsources 4
+pool 0.ubuntu.pool.ntp.org iburst maxsources 1
+pool 1.ubuntu.pool.ntp.org iburst maxsources 1
+pool 2.ubuntu.pool.ntp.org iburst maxsources 2
 
-driftfile /var/lib/ntp/ntp.drift
+# This directive specify the location of the file containing ID/key pairs for
+# NTP authentication.
+keyfile /etc/chrony/chrony.keys
 
-statistics loopstats peerstats clockstats
-filegen loopstats file loopstats type day enable
-filegen peerstats file peerstats type day enable
-filegen clockstats file clockstats type day enable
+# This directive specify the file into which chronyd will store the rate
+# information.
+driftfile /var/lib/chrony/chrony.drift
 
-server 0.cumulusnetworks.pool.ntp.org iburst
-server 1.cumulusnetworks.pool.ntp.org iburst
-server 2.cumulusnetworks.pool.ntp.org iburst
-server 3.cumulusnetworks.pool.ntp.org iburst
+# Uncomment the following line to turn logging on.
+#log tracking measurements statistics
 
+# Log files location.
+logdir /var/log/chrony
 
-# By default, exchange time with everybody, but don't allow configuration.
-restrict -4 default kod notrap nomodify nopeer noquery
-restrict -6 default kod notrap nomodify nopeer noquery
+# Stop bad estimates upsetting machine clock.
+maxupdateskew 100.0
 
-# Local users may interrogate the ntp server more closely.
-restrict 127.0.0.1
-restrict ::1
+# This directive enables kernel synchronisation (every 11 minutes) of the
+# real-time clock. Note that it can’t be used along with the 'rtcfile' directive.
+rtcsync
 
-# Specify interfaces, don't listen on switch ports
-interface listen eth1
+# Step the system clock instead of slewing it if the adjustment is larger than
+# one second, but only in the first three clock updates.
+makestep 1 3
+
+# Allow NTP client access from local network.
+allow 192.168.0.0/16
 EOT
-
 
 #mkdir /etc/ansible
 echo " ### Pushing Ansible Configuration ###"
@@ -394,10 +407,6 @@ echo "Set login as cumulus user"
 echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
 echo "exit" >> /home/vagrant/.bash_profile
 
-#echo "Modifying /etc/app-release to pull EA tarball version"
-#sed -i -e 's/APPLIANCE_VERSION=.*/APPLIANCE_VERSION=2.4.0-SNAPSHOT/' /etc/app-release
-
-
 echo " ### Clone Repo ###"
 git clone https://github.com/CumulusNetworks/cldemo-evpn-symmetric /home/cumulus/cldemo-evpn-symmetric  > /dev/null 2>&1
 chown cumulus:cumulus -R /home/cumulus/cldemo-evpn-symmetric
@@ -432,8 +441,8 @@ echo " ### Enable dnsmasq ###"
 systemctl enable dnsmasq.service > /dev/null 2>&1
 systemctl start dnsmasq.service
 
-echo " ### Restart ntpd ###"
-systemctl restart ntp.service
+#echo " ### Restart ntpd ###"
+#systemctl restart ntp.service
 
 echo " ### Install PAT rule in iptables for outbound access via oob-mgmt ###"
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE # install rule now
