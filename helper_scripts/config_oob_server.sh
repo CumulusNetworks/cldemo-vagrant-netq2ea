@@ -395,12 +395,13 @@ echo "  port: 31980" >>/etc/netq/netq.yml
 echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
 echo "  vrf: mgmt" >>/etc/netq/netq.yml
 
-netq config restart agent
+systemctl stop netq-agent
+systemctl disable netq-agent
+systemctl enable netq-agent@mgmt
 
 systemctl stop ntp.service
 systemctl disable ntp.service
 systemctl enable ntp@mgmt
-systemctl start ntp@mgmt  
 
 nohup bash -c 'sleep 2; shutdown now -r "Rebooting to Complete ZTP"' &
 exit 0
