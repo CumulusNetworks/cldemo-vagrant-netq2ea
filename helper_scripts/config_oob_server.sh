@@ -52,8 +52,8 @@ apt-get install -yq apache2
 echo " ### Install DHCP Server ###"
 apt-get install -yq isc-dhcp-server
 
-echo " ### Install dnsmasq ###"
-apt-get install -yq dnsmasq
+#echo " ### Install dnsmasq ###"
+#apt-get install -yq dnsmasq
 
 #using chrony for time sync with NetQ 2.4 on Ubuntu 18.04
 mkdir /etc/chrony
@@ -195,7 +195,7 @@ shared-network LOCAL-NET{
 
 subnet 192.168.0.0 netmask 255.255.255.0 {
   range 192.168.0.201 192.168.0.250;
-  option domain-name-servers 192.168.0.254;
+  option domain-name-servers 4.2.2.2;
   option domain-name "simulation";
   default-lease-time 172800;  #2 days
   max-lease-time 345600;      #4 days
@@ -215,7 +215,7 @@ echo " ### Push DHCP Host Config ###"
 cat << EOT > /etc/dhcp/dhcpd.hosts
 group {
 
-  option domain-name-servers 192.168.0.254;
+  option domain-name-servers 4.2.2.2;
   option domain-name "simulation";
   option routers 192.168.0.254;
   option www-server 192.168.0.254;
@@ -437,20 +437,20 @@ sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' /home/cumulus/cldemo-evpn-symme
 echo " ### Start Apache for ZTP ###"
 systemctl start apache2
 
-echo " ### Enable dnsmasq ###"
-systemctl enable dnsmasq.service > /dev/null 2>&1
-systemctl start dnsmasq.service
-
-#echo " ### Restart ntpd ###"
-#systemctl restart ntp.service
+#echo " ### Enable dnsmasq ###"
+#systemctl enable dnsmasq.service > /dev/null 2>&1
+#systemctl start dnsmasq.service
 
 echo " ### Install PAT rule in iptables for outbound access via oob-mgmt ###"
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE # install rule now
+sysctl -w net.ipv4.ip_forward=1
 # also put in rc.local so it adds the rule on reboot
 echo "!/bin/sh -e" >/etc/rc.local
 echo " " >>/etc/rc.local
 echo "iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE" >>/etc/rc.local
 echo "exit 0" >>/etc/rc.local
+# also modify /etc/sysctl.conf to persist ipv4 routing
+sed -i 's/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
 
 
 echo "############################################"
