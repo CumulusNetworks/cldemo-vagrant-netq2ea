@@ -119,7 +119,7 @@ Vagrant.configure("2") do |config|
     #device.vm.box_version = "2.4.0-rc1"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 9216
+      v.memory = 8192
       v.cpus = 4
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
