@@ -21,21 +21,19 @@ iface eth0 inet dhcp
     alias Connects (via NAT) To the Internet
 
 auto eth1
-iface eth1
+iface eth1 inet static
     alias Faces the Internal Management Network
     address 192.168.0.254/24
-
 EOT
 
 ifup eth1
 
-echo " ### Adding Repos ###"
-sh -c 'echo "deb http://deb.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb-src http://deb.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list.d/jessie.list'
-apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 >/dev/null 2>&1
+#temp workaround 2.4.0
+wget https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey > /dev/null 2>&1
+apt-key add cumulus-apps-deb.pubkey
+#####
+
+apt-add-repository -y ppa:ansible/ansible
 
 apt-get update
 
@@ -45,45 +43,59 @@ apt-get install -yq git
 echo " ### Install pip ###"
 apt-get install -yq python-pip
 
-echo " ### cloud-opta fixes"
-pip install --upgrade six
-pip install --upgrade PyYAML
-
 echo " ### Install Ansible ###"
-apt-get install -yq -t trusty ansible
+apt-get install -yq ansible
 
 echo " ### Install Apache ###"
 apt-get install -yq apache2
 
-echo " ### Write /etc/ntp.conf ###"
-cat << EOT > /etc/ntp.conf
-# /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
+echo " ### Install DHCP Server ###"
+apt-get install -yq isc-dhcp-server
 
-driftfile /var/lib/ntp/ntp.drift
-
-statistics loopstats peerstats clockstats
-filegen loopstats file loopstats type day enable
-filegen peerstats file peerstats type day enable
-filegen clockstats file clockstats type day enable
-
-server 0.cumulusnetworks.pool.ntp.org iburst
-server 1.cumulusnetworks.pool.ntp.org iburst
-server 2.cumulusnetworks.pool.ntp.org iburst
-server 3.cumulusnetworks.pool.ntp.org iburst
-
-
-# By default, exchange time with everybody, but don't allow configuration.
-restrict -4 default kod notrap nomodify nopeer noquery
-restrict -6 default kod notrap nomodify nopeer noquery
-
-# Local users may interrogate the ntp server more closely.
-restrict 127.0.0.1
-restrict ::1
-
-# Specify interfaces, don't listen on switch ports
-#interface listen eth1
+#using chrony for time sync with NetQ 2.4 on Ubuntu 18.04
+mkdir /etc/chrony
+echo " ### Write /etc/chrony/chrony.conf ###"
+cat << EOT > /etc/chrony/chrony.conf
+# Welcome to the chrony configuration file. See chrony.conf(5) for more
+# information about usuable directives.
+# This will use (up to):
+# - 4 sources from ntp.ubuntu.com which some are ipv6 enabled
+# - 2 sources from 2.ubuntu.pool.ntp.org which is ipv6 enabled as well
+# - 1 source from [01].ubuntu.pool.ntp.org each (ipv4 only atm)
+# This means by default, up to 6 dual-stack and up to 2 additional IPv4-only
+# sources will be used.
+# At the same time it retains some protection against one of the entries being
+# down (compare to just using one of the lines). See (LP: #1754358) for the
+# discussion.
+#
+# About using servers from the NTP Pool Project in general see (LP: #104525).
+# Approved by Ubuntu Technical Board on 2011-02-08.
+# See http://www.pool.ntp.org/join.html for more information.
+pool ntp.ubuntu.com        iburst maxsources 4
+pool 0.ubuntu.pool.ntp.org iburst maxsources 1
+pool 1.ubuntu.pool.ntp.org iburst maxsources 1
+pool 2.ubuntu.pool.ntp.org iburst maxsources 2
+# This directive specify the location of the file containing ID/key pairs for
+# NTP authentication.
+keyfile /etc/chrony/chrony.keys
+# This directive specify the file into which chronyd will store the rate
+# information.
+driftfile /var/lib/chrony/chrony.drift
+# Uncomment the following line to turn logging on.
+#log tracking measurements statistics
+# Log files location.
+logdir /var/log/chrony
+# Stop bad estimates upsetting machine clock.
+maxupdateskew 100.0
+# This directive enables kernel synchronisation (every 11 minutes) of the
+# real-time clock. Note that it can’t be used along with the 'rtcfile' directive.
+rtcsync
+# Step the system clock instead of slewing it if the adjustment is larger than
+# one second, but only in the first three clock updates.
+makestep 1 3
+# Allow NTP client access from local network.
+allow 192.168.0.0/16
 EOT
-
 
 #mkdir /etc/ansible
 echo " ### Pushing Ansible Configuration ###"
@@ -105,21 +117,17 @@ echo " ### Pushing Ansible Hosts File ###"
 cat << EOT > /etc/ansible/hosts
 [oob-switch]
 oob-mgmt-switch ansible_host=192.168.0.1 ansible_user=cumulus
-
 [exit]
 exit02 ansible_host=192.168.0.42 ansible_user=cumulus
 exit01 ansible_host=192.168.0.41 ansible_user=cumulus
-
 [leaf]
 leaf04 ansible_host=192.168.0.14 ansible_user=cumulus
 leaf02 ansible_host=192.168.0.12 ansible_user=cumulus
 leaf03 ansible_host=192.168.0.13 ansible_user=cumulus
 leaf01 ansible_host=192.168.0.11 ansible_user=cumulus
-
 [spine]
 spine02 ansible_host=192.168.0.22 ansible_user=cumulus
 spine01 ansible_host=192.168.0.21 ansible_user=cumulus
-
 [host]
 edge01 ansible_host=192.168.0.51 ansible_user=cumulus
 server01 ansible_host=192.168.0.31 ansible_user=cumulus
@@ -131,14 +139,10 @@ EOT
 echo " ### Pushing DHCP File ###"
 cat << EOT > /etc/dhcp/dhcpd.conf
 ddns-update-style none;
-
 authoritative;
-
 log-facility local7;
-
 option www-server code 72 = ip-address;
 option cumulus-provision-url code 239 = text;
-
 # Create an option namespace called ONIE
 # See: https://github.com/opencomputeproject/onie/wiki/Quick-Start-Guide#advanced-dhcp-2-vivsoonie/onie/
 option space onie code width 1 length width 1;
@@ -158,20 +162,17 @@ class "onie-vendor-classes" {
   match if substring(option vendor-class-identifier, 0, 11) = "onie_vendor";
   # Required to use VIVSO
   option vivso.iana 01:01:01;
-
   ### Example how to match a specific machine type ###
   #if option onie.machine = "" {
   #  option onie.installer_url = "";
   #  option onie.updater_url = "";
   #}
 }
-
 # OOB Management subnet
 shared-network LOCAL-NET{
-
 subnet 192.168.0.0 netmask 255.255.255.0 {
   range 192.168.0.201 192.168.0.250;
-  option domain-name-servers 192.168.0.254;
+  option domain-name-servers 4.2.2.2;
   option domain-name "simulation";
   default-lease-time 172800;  #2 days
   max-lease-time 345600;      #4 days
@@ -180,9 +181,7 @@ subnet 192.168.0.0 netmask 255.255.255.0 {
   option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";
   option ntp-servers 192.168.0.254;
 }
-
 }
-
 #include "/etc/dhcp/dhcpd.pools";
 include "/etc/dhcp/dhcpd.hosts";
 EOT
@@ -190,56 +189,38 @@ EOT
 echo " ### Push DHCP Host Config ###"
 cat << EOT > /etc/dhcp/dhcpd.hosts
 group {
-
-  option domain-name-servers 192.168.0.254;
+  option domain-name-servers 4.2.2.2;
   option domain-name "simulation";
   option routers 192.168.0.254;
   option www-server 192.168.0.254;
   option default-url = "http://192.168.0.254/onie-installer";
-
  host oob-mgmt-switch {hardware ethernet a0:00:00:00:00:61; fixed-address 192.168.0.1; option host-name "oob-mgmt-switch"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
  host exit02 {hardware ethernet a0:00:00:00:00:42; fixed-address 192.168.0.42; option host-name "exit02"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
  host exit01 {hardware ethernet a0:00:00:00:00:41; fixed-address 192.168.0.41; option host-name "exit01"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
  host spine02 {hardware ethernet a0:00:00:00:00:22; fixed-address 192.168.0.22; option host-name "spine02"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
  host spine01 {hardware ethernet a0:00:00:00:00:21; fixed-address 192.168.0.21; option host-name "spine01"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
  host leaf04 {hardware ethernet a0:00:00:00:00:14; fixed-address 192.168.0.14; option host-name "leaf04"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
  host leaf02 {hardware ethernet a0:00:00:00:00:12; fixed-address 192.168.0.12; option host-name "leaf02"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
  host leaf03 {hardware ethernet a0:00:00:00:00:13; fixed-address 192.168.0.13; option host-name "leaf03"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
  host leaf01 {hardware ethernet a0:00:00:00:00:11; fixed-address 192.168.0.11; option host-name "leaf01"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
  host edge01 {hardware ethernet a0:00:00:00:00:51; fixed-address 192.168.0.51; option host-name "edge01"; } 
-
  host server01 {hardware ethernet a0:00:00:00:00:31; fixed-address 192.168.0.31; option host-name "server01"; } 
-
  host server03 {hardware ethernet a0:00:00:00:00:33; fixed-address 192.168.0.33; option host-name "server03"; } 
-
  host server02 {hardware ethernet a0:00:00:00:00:32; fixed-address 192.168.0.32; option host-name "server02"; } 
-
  host server04 {hardware ethernet a0:00:00:00:00:34; fixed-address 192.168.0.34; option host-name "server04"; } 
-
  host internet {hardware ethernet a0:00:00:00:00:50; fixed-address 192.168.0.253; option host-name "internet"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
-
 }#End of static host group
 EOT
 
 chmod 755 -R /etc/dhcp/*
-systemctl enable dhcpd > /dev/null 2>&1
-systemctl restart dhcpd
+systemctl enable isc-dhcp-server > /dev/null 2>&1
+systemctl restart isc-dhcp-server
 
 echo " ### Push Hosts File ###"
 cat << EOT > /etc/hosts
 127.0.0.1 localhost 
 127.0.1.1 oob-mgmt-server
 192.168.0.254 oob-mgmt-server 
-
 192.168.0.1 oob-mgmt-switch
 192.168.0.42 exit02
 192.168.0.41 exit01
@@ -255,7 +236,6 @@ cat << EOT > /etc/hosts
 192.168.0.32 server02
 192.168.0.34 server04
 192.168.0.253 internet
-
 # The following lines are desirable for IPv6 capable hosts
 ::1     localhost ip6-localhost ip6-loopback
 ff02::1 ip6-allnodes
@@ -315,14 +295,13 @@ chmod 777 /var/www/html/license.lic
 echo " ### Pushing ZTP Script ###"
 cat << EOT > /var/www/html/ztp_oob.sh
 #!/bin/bash
-
 ###################
 # Simple ZTP Script
 ###################
-
 function error() {
   echo -e "\e[0;33mERROR: The Zero Touch Provisioning script failed while running the command \$BASH_COMMAND at line \$BASH_LINENO.\e[0m" >&2
 }
+
 trap error ERR
 
 # Setup SSH key authentication for Ansible
@@ -331,8 +310,6 @@ mkdir -p /home/cumulus/.ssh
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzH+R+UhjVicUtI0daNUcedYhfvgT1dbZXgY33Ibm4MOo+X84Iwuzirm3QFnYf2O3uyZjNyrA6fj9qFE7Ekul4bD6PCstQupXPwfPMjns2M7tkHsKnLYjNxWNql/rCUxoH2B6nPyztcRCass3lIc2clfXkCY9Jtf7kgC2e/dmchywPV5PrFqtlHgZUnyoPyWBH7OjPLVxYwtCJn96sFkrjaG9QDOeoeiNvcGlk4DJp/g9L4f2AaEq69x8+gBTFUqAFsD8ecO941cM8sa1167rsRPx7SK3270Ji5EUF3lZsgpaiIgMhtIB/7QNTkN9ZjQBazxxlNVN6WthF8okb7OSt" >> /home/cumulus/.ssh/authorized_keys
 chmod 700 -R /home/cumulus/.ssh
 chown cumulus:cumulus -R /home/cumulus/.ssh
-
-
 echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
 
 # Setup NTP
@@ -344,10 +321,9 @@ sudo apt -y purge cumulus-netq netq-agent netq-apps python-netq-lib
 
 ping 8.8.8.8 -c2
 if [ "\$?" == "0" ]; then
-  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.3" > /etc/apt/sources.list.d/netq.list
+  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.4" > /etc/apt/sources.list.d/netq.list
   apt-get update -qy
-  apt-get install ntpdate -qy
-  apt-get install -yq cumulus-netq
+  apt-get install ntpdate cumulus-netq -qy
 fi
 
 echo " " >/etc/network/interfaces
@@ -363,25 +339,26 @@ echo "iface mgmt" >>/etc/network/interfaces
 echo "    address 127.0.0.1/8" >>/etc/network/interfaces
 echo "    vrf-table auto" >>/etc/network/interfaces
 
-netq config add agent server 192.168.0.254 vrf mgmt
+#write /etc/netq/netq.yml
+echo "netq-agent:" >/etc/netq/netq.yml
+echo "  port: 31980" >>/etc/netq/netq.yml
+echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
+echo "  vrf: mgmt" >>/etc/netq/netq.yml
 
-netq config restart agent
+systemctl stop netq-agent
+systemctl disable netq-agent
+systemctl enable netq-agent@mgmt
 
 systemctl stop ntp.service
 systemctl disable ntp.service
 systemctl enable ntp@mgmt
-systemctl start ntp@mgmt  
-
-systemctl stop netqd
-systemctl disable netqd
-systemctl enable netqd@mgmt
-systemctl restart netqd@mgmt
 
 nohup bash -c 'sleep 2; shutdown now -r "Rebooting to Complete ZTP"' &
 exit 0
 #CUMULUS-AUTOPROVISIONING
 EOT
 
+echo "Set login as cumulus user"
 echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
 echo "exit" >> /home/vagrant/.bash_profile
 
@@ -415,20 +392,17 @@ sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' /home/cumulus/cldemo-evpn-symme
 echo " ### Start Apache for ZTP ###"
 systemctl start apache2
 
-echo " ### Enable dnsmasq ###"
-systemctl enable dnsmasq.service > /dev/null 2>&1
-systemctl start dnsmasq.service
-
-echo " ### Restart ntpd ###"
-systemctl restart ntp.service
-
 echo " ### Install PAT rule in iptables for outbound access via oob-mgmt ###"
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE # install rule now
+sysctl -w net.ipv4.ip_forward=1
 # also put in rc.local so it adds the rule on reboot
-echo "#!/bin/sh -e" >/etc/rc.local
+echo "!/bin/sh -e" >/etc/rc.local
 echo " " >>/etc/rc.local
 echo "iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE" >>/etc/rc.local
 echo "exit 0" >>/etc/rc.local
+# also modify /etc/sysctl.conf to persist ipv4 routing
+sed -i 's/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
+
 
 echo "############################################"
 echo "      DONE!"
