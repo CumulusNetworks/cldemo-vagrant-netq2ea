@@ -99,7 +99,7 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  wbid = 11
+  wbid = 8
   offset = wbid * 2000
 
   config.vm.provider :libvirt do |domain|
@@ -414,7 +414,7 @@ end
     device.vm.hostname = "exit02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -620,7 +620,7 @@ end
     device.vm.hostname = "exit01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -827,7 +827,7 @@ end
     device.vm.hostname = "spine02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1006,7 +1006,7 @@ end
     device.vm.hostname = "spine01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1185,7 +1185,7 @@ end
     device.vm.hostname = "leaf04" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1392,7 +1392,7 @@ end
     device.vm.hostname = "leaf02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1599,7 +1599,7 @@ end
     device.vm.hostname = "leaf03" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1806,7 +1806,7 @@ end
     device.vm.hostname = "leaf01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -2506,7 +2506,7 @@ end
     device.vm.hostname = "internet" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    device.vm.box_version = "3.7.8"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
