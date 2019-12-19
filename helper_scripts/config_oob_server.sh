@@ -21,60 +21,77 @@ iface eth0 inet dhcp
     alias Connects (via NAT) To the Internet
 
 auto eth1
-iface eth1
+iface eth1 inet static
     alias Faces the Internal Management Network
     address 192.168.0.254/24
 
 EOT
 
-sudo ifup eth1
+ifup eth1
 
-echo " ### Adding Repos ###"
-sh -c 'echo "deb http://deb.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb-src http://deb.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb-src http://security.debian.org/ jessie/updates main contrib non-free" >> /etc/apt/sources.list.d/jessie.list'
-sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list.d/jessie.list'
-apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367 >/dev/null 2>&1
+#temp workaround 2.4.0
+wget https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey > /dev/null 2>&1
+apt-key add cumulus-apps-deb.pubkey
+#####
+
+apt-add-repository -y ppa:ansible/ansible
 
 apt-get update
 
 echo " ### Install Ansible ###"
-apt-get install -yq git python-netaddr sshpass
-apt-get install -yq -t trusty ansible
+apt-get install -yq git python-netaddr sshpass python-pip
+apt-get install -yq ansible
 
 echo " ### Install Apache ###"
 apt-get install -yq apache2
 
-echo " ### Write /etc/ntp.conf ###"
-cat << EOT > /etc/ntp.conf
-# /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
+echo " ### Install DHCP Server ###"
+apt-get install -yq isc-dhcp-server
 
-driftfile /var/lib/ntp/ntp.drift
-
-statistics loopstats peerstats clockstats
-filegen loopstats file loopstats type day enable
-filegen peerstats file peerstats type day enable
-filegen clockstats file clockstats type day enable
-
-server 0.cumulusnetworks.pool.ntp.org iburst
-server 1.cumulusnetworks.pool.ntp.org iburst
-server 2.cumulusnetworks.pool.ntp.org iburst
-server 3.cumulusnetworks.pool.ntp.org iburst
-
-
-# By default, exchange time with everybody, but don't allow configuration.
-restrict -4 default kod notrap nomodify nopeer noquery
-restrict -6 default kod notrap nomodify nopeer noquery
-
-# Local users may interrogate the ntp server more closely.
-restrict 127.0.0.1
-restrict ::1
-
-# Specify interfaces, don't listen on switch ports
-interface listen eth1
+#using chrony for time sync with NetQ 2.4 on Ubuntu 18.04
+mkdir /etc/chrony
+echo " ### Write /etc/chrony/chrony.conf ###"
+cat << EOT > /etc/chrony/chrony.conf
+# Welcome to the chrony configuration file. See chrony.conf(5) for more
+# information about usuable directives.
+# This will use (up to):
+# - 4 sources from ntp.ubuntu.com which some are ipv6 enabled
+# - 2 sources from 2.ubuntu.pool.ntp.org which is ipv6 enabled as well
+# - 1 source from [01].ubuntu.pool.ntp.org each (ipv4 only atm)
+# This means by default, up to 6 dual-stack and up to 2 additional IPv4-only
+# sources will be used.
+# At the same time it retains some protection against one of the entries being
+# down (compare to just using one of the lines). See (LP: #1754358) for the
+# discussion.
+#
+# About using servers from the NTP Pool Project in general see (LP: #104525).
+# Approved by Ubuntu Technical Board on 2011-02-08.
+# See http://www.pool.ntp.org/join.html for more information.
+pool ntp.ubuntu.com        iburst maxsources 4
+pool 0.ubuntu.pool.ntp.org iburst maxsources 1
+pool 1.ubuntu.pool.ntp.org iburst maxsources 1
+pool 2.ubuntu.pool.ntp.org iburst maxsources 2
+# This directive specify the location of the file containing ID/key pairs for
+# NTP authentication.
+keyfile /etc/chrony/chrony.keys
+# This directive specify the file into which chronyd will store the rate
+# information.
+driftfile /var/lib/chrony/chrony.drift
+# Uncomment the following line to turn logging on.
+#log tracking measurements statistics
+# Log files location.
+logdir /var/log/chrony
+# Stop bad estimates upsetting machine clock.
+maxupdateskew 100.0
+# This directive enables kernel synchronisation (every 11 minutes) of the
+# real-time clock. Note that it can’t be used along with the 'rtcfile' directive.
+rtcsync
+# Step the system clock instead of slewing it if the adjustment is larger than
+# one second, but only in the first three clock updates.
+makestep 1 3
+# Allow NTP client access from local network.
+allow 192.168.0.0/16
 EOT
-
 
 echo " ### Pushing Ansible Configuration ###"
 cat << EOT > /etc/ansible/ansible.cfg
@@ -162,7 +179,7 @@ shared-network LOCAL-NET{
 
 subnet 192.168.0.0 netmask 255.255.255.0 {
   range 192.168.0.201 192.168.0.250;
-  option domain-name-servers 192.168.0.254;
+  option domain-name-servers 4.2.2.2;
   option domain-name "simulation";
   default-lease-time 172800;  #2 days
   max-lease-time 345600;      #4 days
@@ -182,7 +199,7 @@ echo " ### Push DHCP Host Config ###"
 cat << EOT > /etc/dhcp/dhcpd.hosts
 group {
 
-  option domain-name-servers 192.168.0.254;
+  option domain-name-servers 4.2.2.2;
   option domain-name "simulation";
   option routers 192.168.0.254;
   option www-server 192.168.0.254;
@@ -335,7 +352,7 @@ sudo apt -y purge cumulus-netq netq-agent netq-apps python-netq-lib
 
 ping 8.8.8.8 -c2
 if [ "\$?" == "0" ]; then
-  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.3" > /etc/apt/sources.list.d/netq.list
+  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.4" > /etc/apt/sources.list.d/netq.list
   apt-get update -qy
   apt-get install ntpdate -qy
   apt-get install -yq cumulus-netq
@@ -363,14 +380,13 @@ echo "  port: 32708" >>/etc/netq/netq.yml
 echo "  server: 192.168.0.254" >>/etc/netq/netq.yml
 echo "  vrf: mgmt" >>/etc/netq/netq.yml
 
-netq config restart agent
-netq config restart cli
+systemctl stop netq-agent
+systemctl disable netq-agent
+systemctl enable netq-agent@mgmt
 
 systemctl stop ntp.service
 systemctl disable ntp.service
 systemctl enable ntp@mgmt
-systemctl start ntp@mgmt  
-
 
 nohup bash -c 'sleep 2; shutdown now -r "Rebooting to Complete ZTP"' &
 exit 0
@@ -410,20 +426,16 @@ sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' /home/cumulus/cldemo-evpn-symme
 echo " ### Start Apache for ZTP ###"
 systemctl start apache2
 
-echo " ### Enable dnsmasq ###"
-systemctl enable dnsmasq.service > /dev/null 2>&1
-systemctl start dnsmasq.service
-
-echo " ### Restart ntpd ###"
-systemctl restart ntp.service
-
 echo " ### Install PAT rule in iptables for outbound access via oob-mgmt ###"
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE # install rule now
+sysctl -w net.ipv4.ip_forward=1
 # also put in rc.local so it adds the rule on reboot
 echo "!/bin/sh -e" >/etc/rc.local
 echo " " >>/etc/rc.local
 echo "iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE" >>/etc/rc.local
 echo "exit 0" >>/etc/rc.local
+# also modify /etc/sysctl.conf to persist ipv4 routing
+sed -i 's/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
 
 
 echo "############################################"
