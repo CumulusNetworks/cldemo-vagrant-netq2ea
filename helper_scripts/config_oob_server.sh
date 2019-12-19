@@ -29,6 +29,11 @@ EOT
 
 ifup eth1
 
+#temp workaround 2.4.0
+wget https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey > /dev/null 2>&1
+apt-key add cumulus-apps-deb.pubkey
+#####
+
 apt-add-repository -y ppa:ansible/ansible
 
 apt-get update
@@ -39,10 +44,6 @@ apt-get install -yq git
 echo " ### Install pip ###"
 apt-get install -yq python-pip
 
-#echo " ### janky cloud-opta fixes"
-#pip install --upgrade six
-#pip install --upgrade PyYAML
-
 echo " ### Install Ansible ###"
 apt-get install -yq ansible
 
@@ -51,9 +52,6 @@ apt-get install -yq apache2
 
 echo " ### Install DHCP Server ###"
 apt-get install -yq isc-dhcp-server
-
-#echo " ### Install dnsmasq ###"
-#apt-get install -yq dnsmasq
 
 #using chrony for time sync with NetQ 2.4 on Ubuntu 18.04
 mkdir /etc/chrony
