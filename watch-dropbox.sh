@@ -25,8 +25,8 @@ FILELIST=`ls -l /mnt/nvme/engineering-dropbox/ | grep -v '^total' | cut -d' ' -f
 #done
 
 #Regex paterns to know which files we're working with
-ubuntu_apps="^netq-apps_.*ub18.04u.*.deb"
-ubuntu_agent="^netq-agent_.*ub18.04u.*.deb"
+ubuntu_apps="^netq-apps_.*ub16.*.deb"
+ubuntu_agent="^netq-agent_.*ub16.*.deb"
 cl_apps="^netq-apps_.*cl3u.*.deb"
 cl_agent="^netq-agent_.*cl3u.*.deb"
 netq_onprem="^cumulus-netq-server-.*-ts-amd64.*libvirt.box"
