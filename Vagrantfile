@@ -147,8 +147,8 @@ Vagrant.configure("2") do |config|
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -549,8 +549,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -756,8 +756,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -943,8 +943,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1122,8 +1122,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1321,8 +1321,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1528,8 +1528,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
     
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1735,8 +1735,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1942,8 +1942,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2068,8 +2068,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
 
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
@@ -2166,8 +2166,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
 
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
@@ -2264,8 +2264,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
 
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
@@ -2362,8 +2362,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
 
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
@@ -2460,8 +2460,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
     
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
@@ -2558,8 +2558,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
     
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
