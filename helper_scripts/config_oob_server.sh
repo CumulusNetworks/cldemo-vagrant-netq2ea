@@ -316,11 +316,13 @@ sed -i 's/^server 0.cumulusnetworks.pool.ntp.org iburst/server 192.168.0.254 ibu
 sudo apt -y purge cumulus-netq netq-agent netq-apps python-netq-lib
 ping 8.8.8.8 -c2
 if [ "\$?" == "0" ]; then
-  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-latest" > /etc/apt/sources.list.d/netq.list
+  #echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-latest" > /etc/apt/sources.list.d/netq.list
   apt-get update -qy
   apt-get install ntpdate -qy
-  apt-get install -yq cumulus-netq
 fi
+
+dpkg -i /home/vagrant/netq-agent_cl.deb
+dpkg -i /home/vagrant/netq-apps_cl.deb
 
 echo " " >/etc/network/interfaces
 echo "auto lo" >>/etc/network/interfaces
