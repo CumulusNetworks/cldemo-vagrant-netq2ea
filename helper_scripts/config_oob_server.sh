@@ -321,7 +321,7 @@ sudo apt -y purge cumulus-netq netq-agent netq-apps python-netq-lib
 
 ping 8.8.8.8 -c2
 if [ "\$?" == "0" ]; then
-  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-2.4" > /etc/apt/sources.list.d/netq.list
+  echo "deb http://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-latest" > /etc/apt/sources.list.d/netq.list
   apt-get update -qy
   apt-get install ntpdate cumulus-netq -qy
 fi
