@@ -1,0 +1,15 @@
+{
+  "name": "cumulus/ts",
+  "description": "NetQ OnPrem",
+  "versions": [
+    {
+      "version": "2.4.0",
+      "providers": [
+        {
+          "name": "libvirt",
+          "url": "file:///mnt/nvme/ubuntu-18.04-netq-2.4.0-ts-libvirt.box"
+        }
+      ]
+    }
+  ]
+}
