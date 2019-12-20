@@ -4,6 +4,8 @@
 
 This branch "debian-packages" is meant to be used when we are in EA or testing release candidates for NetQ On-Prem. In pre-release, we do not have the NetQ agent packages available on our public repo able to be installed using apt or apt-get. We are provided debian packages (debs) from engineering that must be installed manually with the dpkg -i command. These packages are preloaded onto the tea servers (chai or roobios) and the provisioning scripts here assume a constant filename that is copied onto the box, then installed in the config_*.sh script
 
+watch-dropbox.sh runs as a cron job every minute. It looks for new files in the engineering dropbox. If it finds new files, it assumes they are the most recent ones, and it copies them into the place where the Vagrant file provisioner will copy them into the machines when you do a 'vagrant up'
+
 See more deets here: https://wiki.cumulusnetworks.com/display/PC/Field+Team+Workbenches
 
 Using:
