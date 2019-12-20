@@ -102,7 +102,7 @@ Vagrant.configure("2") do |config|
   wbid = 9
   offset = wbid * 100
   guiport = wbid + 8000
-  netq_version = "212rc1"
+  setupguiport = wbid + 8400
 
   config.vm.provider :libvirt do |domain|
     domain.management_network_address = "10.255.#{wbid}.0/24"
@@ -119,7 +119,7 @@ Vagrant.configure("2") do |config|
     
     device.vm.hostname = "oob-mgmt-server" 
     
-    device.vm.box = "cumulus/ts#{netq_version}"
+    device.vm.box = "cumulus/ts"
 
     device.vm.provider :libvirt do |v|
       v.memory = 65536
@@ -141,7 +141,8 @@ Vagrant.configure("2") do |config|
             :libvirt__iface_name => 'eth1',
             auto_config: false
     
-    config.vm.network "forwarded_port", guest: 32666, host: guiport, host_ip:"0.0.0.0"		
+    config.vm.network "forwarded_port", guest: 32666, host: guiport, host_ip:"0.0.0.0"
+    config.vm.network "forwarded_port", guest: 8443, host: setupguiport, host_ip:"0.0.0.0"
 
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
@@ -161,7 +162,7 @@ end
     device.vm.hostname = "oob-mgmt-switch" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -421,7 +422,7 @@ end
     device.vm.hostname = "exit02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -628,7 +629,7 @@ end
     device.vm.hostname = "exit01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -835,7 +836,7 @@ end
     device.vm.hostname = "spine02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1014,7 +1015,7 @@ end
     device.vm.hostname = "spine01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1193,7 +1194,7 @@ end
     device.vm.hostname = "leaf04" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1400,7 +1401,7 @@ end
     device.vm.hostname = "leaf02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1607,7 +1608,7 @@ end
     device.vm.hostname = "leaf03" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1814,7 +1815,7 @@ end
     device.vm.hostname = "leaf01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -2510,7 +2511,7 @@ end
     device.vm.hostname = "internet" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
