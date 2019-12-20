@@ -437,7 +437,6 @@ echo "exit 0" >>/etc/rc.local
 # also modify /etc/sysctl.conf to persist ipv4 routing
 sed -i 's/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
 
-
 echo "############################################"
 echo "      DONE!"
 echo "############################################"
