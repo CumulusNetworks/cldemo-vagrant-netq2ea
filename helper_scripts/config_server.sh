@@ -38,7 +38,7 @@ ping 8.8.8.8 -c2
 if [ "$?" == "0" ]; then
   wget https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey > /dev/null 2>&1
   apt-key add cumulus-apps-deb.pubkey
-  echo "deb [arch=amd64] https://apps3.cumulusnetworks.com/repos/deb xenial netq-2.4" > /etc/apt/sources.list.d/netq.list
+  echo "deb [arch=amd64] https://apps3.cumulusnetworks.com/repos/deb xenial netq-latest" > /etc/apt/sources.list.d/netq.list
   apt-get update -qy
   apt-get install unzip lldpd ntp ntpdate traceroute -qy
   apt-get install cumulus-netq -qy
