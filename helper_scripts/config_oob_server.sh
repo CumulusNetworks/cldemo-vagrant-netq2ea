@@ -239,8 +239,8 @@ group {
 EOT
 
 chmod 755 -R /etc/dhcp/*
-systemctl enable dhcpd > /dev/null 2>&1
-systemctl restart dhcpd
+systemctl enable isc-dhcp-server > /dev/null 2>&1
+systemctl restart isc-dhcp-server
 
 echo " ### Push Hosts File ###"
 cat << EOT > /etc/hosts
