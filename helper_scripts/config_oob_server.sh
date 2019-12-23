@@ -53,6 +53,11 @@ apt-get install -yq apache2
 echo " ### Install DHCP Server ###"
 apt-get install -yq isc-dhcp-server
 
+##Netq needs port 80 now, and install fails when apache runs on port 80 for ZTP
+echo " ### Move apache to port 7483 ###"
+sed -i 's/Listen\ 80/Listen\ 192.168.0.254:7843/' /etc/apache2/ports.conf
+sed -i 's/<VirtualHost\ \*:80/<VirtualHost\ 192.168.0.254:7843/' /etc/apache2/sites-enabled/000-default.conf
+
 #using chrony for time sync with NetQ 2.4 on Ubuntu 18.04
 mkdir /etc/chrony
 echo " ### Write /etc/chrony/chrony.conf ###"
@@ -198,8 +203,8 @@ subnet 192.168.0.0 netmask 255.255.255.0 {
   default-lease-time 172800;  #2 days
   max-lease-time 345600;      #4 days
   option www-server 192.168.0.254;
-  option default-url = "http://192.168.0.254/onie-installer";
-  option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";
+  option default-url = "http://192.168.0.254:7843/onie-installer";
+  option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";
   option ntp-servers 192.168.0.254;
 }
 
@@ -217,25 +222,25 @@ group {
   option domain-name "simulation";
   option routers 192.168.0.254;
   option www-server 192.168.0.254;
-  option default-url = "http://192.168.0.254/onie-installer";
+  option default-url = "http://192.168.0.254:7843/onie-installer";
 
- host oob-mgmt-switch {hardware ethernet a0:00:00:00:00:61; fixed-address 192.168.0.1; option host-name "oob-mgmt-switch"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host oob-mgmt-switch {hardware ethernet a0:00:00:00:00:61; fixed-address 192.168.0.1; option host-name "oob-mgmt-switch"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
- host exit02 {hardware ethernet a0:00:00:00:00:42; fixed-address 192.168.0.42; option host-name "exit02"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host exit02 {hardware ethernet a0:00:00:00:00:42; fixed-address 192.168.0.42; option host-name "exit02"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
- host exit01 {hardware ethernet a0:00:00:00:00:41; fixed-address 192.168.0.41; option host-name "exit01"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host exit01 {hardware ethernet a0:00:00:00:00:41; fixed-address 192.168.0.41; option host-name "exit01"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
- host spine02 {hardware ethernet a0:00:00:00:00:22; fixed-address 192.168.0.22; option host-name "spine02"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host spine02 {hardware ethernet a0:00:00:00:00:22; fixed-address 192.168.0.22; option host-name "spine02"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
- host spine01 {hardware ethernet a0:00:00:00:00:21; fixed-address 192.168.0.21; option host-name "spine01"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host spine01 {hardware ethernet a0:00:00:00:00:21; fixed-address 192.168.0.21; option host-name "spine01"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
- host leaf04 {hardware ethernet a0:00:00:00:00:14; fixed-address 192.168.0.14; option host-name "leaf04"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host leaf04 {hardware ethernet a0:00:00:00:00:14; fixed-address 192.168.0.14; option host-name "leaf04"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
- host leaf02 {hardware ethernet a0:00:00:00:00:12; fixed-address 192.168.0.12; option host-name "leaf02"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host leaf02 {hardware ethernet a0:00:00:00:00:12; fixed-address 192.168.0.12; option host-name "leaf02"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
- host leaf03 {hardware ethernet a0:00:00:00:00:13; fixed-address 192.168.0.13; option host-name "leaf03"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host leaf03 {hardware ethernet a0:00:00:00:00:13; fixed-address 192.168.0.13; option host-name "leaf03"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
- host leaf01 {hardware ethernet a0:00:00:00:00:11; fixed-address 192.168.0.11; option host-name "leaf01"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host leaf01 {hardware ethernet a0:00:00:00:00:11; fixed-address 192.168.0.11; option host-name "leaf01"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
  host edge01 {hardware ethernet a0:00:00:00:00:51; fixed-address 192.168.0.51; option host-name "edge01"; } 
 
@@ -247,7 +252,7 @@ group {
 
  host server04 {hardware ethernet a0:00:00:00:00:34; fixed-address 192.168.0.34; option host-name "server04"; } 
 
- host internet {hardware ethernet a0:00:00:00:00:50; fixed-address 192.168.0.253; option host-name "internet"; option cumulus-provision-url "http://192.168.0.254/ztp_oob.sh";  } 
+ host internet {hardware ethernet a0:00:00:00:00:50; fixed-address 192.168.0.253; option host-name "internet"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
 
 }#End of static host group
 EOT
@@ -438,7 +443,7 @@ sed -i -e 's/add\ default/add\ 10\.0\.0\.0\/8/g' /home/cumulus/cldemo-evpn-symme
 #sed -i -e 's/advertise-all-vni/advertise-all-vni\r\n\ \ advertise-svi-ip/' /home/cumulus/cldemo-evpn-symmetric/config/leaf04/frr.conf
 
 echo " ### Start Apache for ZTP ###"
-systemctl start apache2
+systemctl restart apache2
 
 #echo " ### Enable dnsmasq ###"
 #systemctl enable dnsmasq.service > /dev/null 2>&1
