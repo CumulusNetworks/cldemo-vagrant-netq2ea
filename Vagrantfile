@@ -99,10 +99,8 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 
-  wbid = 14
-  offset = wbid * 100
-  #guiport = wbid + 8000
-  netq_version = "220rc2"
+  wbid = 8
+  offset = wbid * 2000
 
   config.vm.provider :libvirt do |domain|
     domain.management_network_address = "10.255.#{wbid}.0/24"
@@ -117,7 +115,8 @@ Vagrant.configure("2") do |config|
     
     device.vm.hostname = "oob-mgmt-server" 
     
-    device.vm.box = "cumulus/tscloud220rc2"
+    device.vm.box = "cumulus/tscloud-ea"
+    #device.vm.box_version = "2.4.0-rc1"
 
     device.vm.provider :libvirt do |v|
       v.memory = 8192
@@ -139,15 +138,11 @@ Vagrant.configure("2") do |config|
             :libvirt__iface_name => 'eth1',
             auto_config: false
     
-    #config.vm.network "forwarded_port", guest: 32666, host: guiport, host_ip:"0.0.0.0"		
-
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    #Copy the tarball onto /mnt/installables
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/NetQ-2.2.0-opta.tgz", destination: "NetQ-2.2.0-opta.tgz"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    #config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    #config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -161,7 +156,7 @@ end
     device.vm.hostname = "oob-mgmt-switch" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.3"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -419,7 +414,7 @@ end
     device.vm.hostname = "exit02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -550,8 +545,8 @@ end
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
     device.vm.provision :shell , path: "./helper_scripts/config_switch.sh"
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
     
     # Install Rules for the interface re-map
     device.vm.provision :shell , :inline => <<-delete_udev_directory
@@ -625,7 +620,7 @@ end
     device.vm.hostname = "exit01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -752,8 +747,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -832,7 +827,7 @@ end
     device.vm.hostname = "spine02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -939,8 +934,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1011,7 +1006,7 @@ end
     device.vm.hostname = "spine01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1118,8 +1113,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1190,7 +1185,7 @@ end
     device.vm.hostname = "leaf04" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1317,8 +1312,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb" 
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb" 
 
    # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1397,7 +1392,7 @@ end
     device.vm.hostname = "leaf02" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1524,8 +1519,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
     
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1604,7 +1599,7 @@ end
     device.vm.hostname = "leaf03" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1731,8 +1726,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -1811,7 +1806,7 @@ end
     device.vm.hostname = "leaf01" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -1938,8 +1933,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2016,7 +2011,7 @@ end
     
     device.vm.hostname = "edge01" 
     
-    device.vm.box = "yk0/ubuntu-xenial"
+    device.vm.box = "generic/ubuntu1804"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
@@ -2067,8 +2062,8 @@ end
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
     
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2114,7 +2109,8 @@ end
     
     device.vm.hostname = "server01" 
     
-    device.vm.box = "yk0/ubuntu-xenial"
+    device.vm.box = "generic/ubuntu1804"
+    device.vm.box_version = "1.9.18"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
@@ -2165,8 +2161,8 @@ end
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
 
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"    
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"    
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2212,7 +2208,8 @@ end
     
     device.vm.hostname = "server03" 
     
-    device.vm.box = "yk0/ubuntu-xenial"
+    device.vm.box = "generic/ubuntu1804"
+    device.vm.box_version = "1.9.18"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
@@ -2263,8 +2260,8 @@ end
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
     
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2309,8 +2306,9 @@ end
   config.vm.define "server02" do |device|
     
     device.vm.hostname = "server02" 
+    device.vm.box_version = "1.9.18"
     
-    device.vm.box = "yk0/ubuntu-xenial"
+    device.vm.box = "generic/ubuntu1804"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
@@ -2361,8 +2359,8 @@ end
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
     
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2408,7 +2406,8 @@ end
     
     device.vm.hostname = "server04" 
     
-    device.vm.box = "yk0/ubuntu-xenial"
+    device.vm.box = "generic/ubuntu1804"
+    device.vm.box_version = "1.9.18"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
@@ -2459,8 +2458,8 @@ end
     # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
     device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
     
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_ubuntu.deb", destination: "netq-agent_ubuntu.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_ubuntu.deb", destination: "netq-apps_ubuntu.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
@@ -2507,7 +2506,7 @@ end
     device.vm.hostname = "internet" 
     
     device.vm.box = "CumulusCommunity/cumulus-vx"
-    #device.vm.box_version = "3.7.3"
+    device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
       v.memory = 768
@@ -2554,8 +2553,8 @@ end
     # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
     
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
-    config.vm.provision "file", source: "/mnt/nvme/#{netq_version}/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-agent_cl.deb", destination: "netq-agent_cl.deb"
+    config.vm.provision "file", source: "/mnt/nvme/netq_releases/dev-client-debs/netq-apps_cl.deb", destination: "netq-apps_cl.deb"
 
     # Run the Config specified in the Node Attributes
     device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'

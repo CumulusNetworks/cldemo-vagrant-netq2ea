@@ -1,26 +1,15 @@
 #!/bin/bash
 
 echo "#################################"
-echo "  Running config_server.sh"
+echo "  Running Extra_Server_Config.sh"
 echo "#################################"
-sudo su
 
-# to make the red "dpkg-reconfigure: unable to re-open stdin: No file or directory" not happen from apt-get stuff
+# cosmetic fix for dpkg-reconfigure: unable to re-open stdin: No file or directory during vagrant up
 export DEBIAN_FRONTEND=noninteractive
-
-# Make DHCP Try Over and Over Again
-echo "retry 1;" >> /etc/dhcp/dhclient.conf
-
-#Replace existing network interfaces file
-echo -e "auto lo" > /etc/network/interfaces
-echo -e "iface lo inet loopback\n\n" >> /etc/network/interfaces
-
-#Add vagrant interface
-echo -e "\n\nauto eth0" >> /etc/network/interfaces
-echo -e "iface eth0 inet dhcp\n\n" >> /etc/network/interfaces
 
 useradd cumulus -m -s /bin/bash
 echo "cumulus:CumulusLinux!" | chpasswd
+echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
 sed "s/PasswordAuthentication no/PasswordAuthentication yes/" -i /etc/ssh/sshd_config
 
 ## Convenience code. This is normally done in ZTP.
@@ -32,77 +21,82 @@ chown -R cumulus:cumulus /home/cumulus
 chmod 600 /home/cumulus/.ssh/*
 chmod 700 /home/cumulus/.ssh
 
+echo "Add bonding module"
+echo "bonding" >> /etc/modules
 
-# Other stuff
-ping 8.8.8.8 -c2
-if [ "$?" == "0" ]; then
-  wget https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey > /dev/null 2>&1
-  apt-key add cumulus-apps-deb.pubkey
-  echo "deb [arch=amd64] https://apps3.cumulusnetworks.com/repos/deb xenial netq-2.2" > /etc/apt/sources.list.d/cl.list
-  apt-get update -qy
-  apt-get install unzip lldpd ntp ntpdate traceroute -qy
-  echo "configure lldp portidsubtype ifname" > /etc/lldpd.d/port_info.conf 
-fi
+#echo "Add Cumulus Apps Pubkey"
+#wget -q -O- https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey | apt-key add - 2>&1
 
+#echo "Adding Cumulus Apps Repo"
+#echo "deb http://apps3.cumulusnetworks.com/repos/deb bionic netq-2.2" > /etc/apt/sources.list.d/netq.list
+
+#Install LLDP & NTP
+echo "Installing LLDP NTP & Python"
+apt-get update -qy && apt-get install lldpd ntp ntpdate python ifenslave -qy
+#apt-get install cumulus-netq -qy
+echo "configure lldp portidsubtype ifname" > /etc/lldpd.d/port_info.conf
+
+echo "Enabling LLDP"
+/lib/systemd/systemd-sysv-install enable lldpd
+systemctl start lldpd.service
+
+echo "Manual NetQ Agent install from debs"
 dpkg -i /home/vagrant/netq-agent_ubuntu.deb
 dpkg -i /home/vagrant/netq-apps_ubuntu.deb
 
-# Set Timezone
-cat << EOT > /etc/timezone
-Etc/UTC
-EOT
+echo "Configuring NetQ agent"
+netq config add agent server 192.168.0.254
+netq config restart agent
 
-# Apply Timezone Now
-# dpkg-reconfigure -f noninteractive tzdata
+echo "Configure etc/network/interfaces"
+echo -e "auto lo" > /etc/network/interfaces
+echo -e "iface lo inet loopback\n\n" >> /etc/network/interfaces
+echo -e  "source /etc/network/interfaces.d/*.cfg\n" >> /etc/network/interfaces
 
+#Add vagrant interface
+echo -e "\n\nauto vagrant" > /etc/network/interfaces.d/vagrant.cfg
+echo -e "iface vagrant inet dhcp\n\n" >> /etc/network/interfaces.d/vagrant.cfg
+
+echo -e "\n\nauto eth0" > /etc/network/interfaces.d/eth0.cfg
+echo -e "iface eth0 inet dhcp\n\n" >> /etc/network/interfaces.d/eth0.cfg
+
+echo "retry 1;" >> /etc/dhcp/dhclient.conf
+echo "timeout 600;" >> /etc/dhcp/dhclient.conf
+
+echo "Configure NTP"
+timedatectl set-ntp false
 # Write NTP Configuration
 cat << EOT > /etc/ntp.conf
 # /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
-
 driftfile /var/lib/ntp/ntp.drift
-
 statistics loopstats peerstats clockstats
 filegen loopstats file loopstats type day enable
 filegen peerstats file peerstats type day enable
 filegen clockstats file clockstats type day enable
-
-server 192.168.0.254 iburst
-
+server 192.168.200.1 iburst
 # By default, exchange time with everybody, but don't allow configuration.
 restrict -4 default kod notrap nomodify nopeer noquery
 restrict -6 default kod notrap nomodify nopeer noquery
-
 # Local users may interrogate the ntp server more closely.
 restrict 127.0.0.1
 restrict ::1
-
 # Specify interfaces, don't listen on switch ports
 interface listen eth0
 EOT
 
+echo "Enable and start NTP"
 /lib/systemd/systemd-sysv-install enable ntp
 systemctl start ntp.service
 
-netq config add agent server 192.168.0.254
-#This needs to be done manuall with your special keys using cloud-opta
-#netq config add cli server 192.168.0.254
-netq config restart agent
-#netq config restart cli
-
-# Ok this is a dirty hack to get netq 2.0 interface checks to succeed. It causes no functional problems otherwise and please don't do this unless you need a clean netq interface check
-# netq detects a autonegotiation mismatch between all server and leaf ports. Ubuntu is autoneg on, CL leafs are autoneg off
-# looks like ubuntu needs real speed/duplex from emulated e1000 in libvirt to make bond come up, but i can't disable autoneg
-# but CL VX doesn't seem to let you enable autoneg either
-# But if you set ubuntu to 100 full autoneg off, then ethtool shows autoneg off and netq is happy
-# ethtool still shows speed as 1000mbps when you do this, but who knows what else it breaks.
+echo "Virtual network adapter speed/duplex hackery"
 ethtool -s eth1 speed 100 duplex full autoneg off
 ethtool -s eth2 speed 100 duplex full autoneg off
 echo "#!/bin/bash" >/etc/rc.local
-echo "/sbin/ethtool -s eth1 speed 100 duplex full autoneg off" >>/etc/rc.local
-echo "/sbin/ethtool -s eth2 speed 100 duplex full autoneg off" >>/etc/rc.local
+echo "ethtool -s eth1 speed 100 duplex full autoneg off" >>/etc/rc.local
+echo "ethtool -s eth2 speed 100 duplex full autoneg off" >>/etc/rc.local
 echo "sudo systemctl restart networking" >>/etc/rc.local
 echo "exit 0" >>/etc/rc.local
-#end dirty hack, please find a better way to do this or don't do it at all because it feels janky af and normally causes no problems.
+chmod 755 /etc/rc.local
 
 #add cronjob to ping and send traffic for bridge learning
 echo "* * * * * root /bin/ping -q -c 4 10.0.0.253" >>/etc/crontab
