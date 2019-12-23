@@ -6,20 +6,19 @@ This is a repo to use a cloud-opta box in place of oob-mgmt-server in a [cldemo-
 Prerequisites:
 * Clone `git clone -b cloud-opta https://github.com/CumulusNetworks/cldemo-vagrant-netq2ea.git`
 * Download the NetQ 2.x libvirt.box file
-* Add the box to vagrant: `vagrant box add cumulus-netq-server-2.2.2-tscloud-amd64-libvirt.box --name=cumulus/tscloud222`
+* Use/Edit the included `netq-cloud-opta-box-add.json` file to add the NetQ OPTA box with the *CORRECT VERSION*
+* Add the box to vagrant using the json file: `vagrant box add netq-cloud-opta-box-add.json`
 
 Using:
 1) cd to the directory from the git clone 
 2) `vagrant up oob-mgmt-server oob-mgmt-switch && vagrant up`
 3) `vagrant ssh oob-mgmt-server`
-4) Once in the oob-mgmt-server, install the OPTA: (the .tgz is already on the box) 
+4) Bootstrap the `server netq bootstrap master interface eth0 tarball /mnt/installables/netq-bootstrap-2.4.0.tgz` (mind your version number)
 
-`netq install opta interface eth0 tarball download config-key <config-key>`
-- this step takes a few mins
-- config-key should be recieved from onboarding with cloud server
+*At this step, the GUI/Wizard can be used to install the NetQ app. CLI instructions below: 
 
-5) Add CLI server to OPTA (and optionally, the network devices)
-
+5) Install the NetQ application `netq install opta standalone full interface eth0 bundle /mnt/installables/NetQ-2.4.0-opta.tgz config-key <your-config-key>`
+6) Add CLI server to OPTA (and optionally, the network devices)
 
 `netq config add cli server api.netq.cumulusnetworks.com access-key <access-key> secret-key <secret-key> port 443 <premises (name)>`  
 `netq config restart cli`
