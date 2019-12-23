@@ -6,18 +6,33 @@ This branch "debian-packages" is meant to be used when we are in EA or testing r
 
 watch-dropbox.sh runs as a cron job every minute. It looks for new files in the engineering dropbox. If it finds new files, it assumes they are the most recent ones, and it copies them into the place where the Vagrant file provisioner will copy them into the machines when you do a 'vagrant up'
 
+At this time, we still have to manually move/copy and 'vagrant box add' for the on-prem images. This branch has Vagrantfile set to look for a box named `cumulus/ts-ea`. Use the .json file attached to add boxes. `vagrant box add netq-onprem-ea-add.json`. Use version numbering by appending 9s so that the "most recent" or "highest version" box is always loaded. The intent is to have a more static repo, where all the consumers need to do is vagrant destroy then vagrant up without chanign the repo to realize updates to the NetQ agents or NetQ server base box.
+
+For example)
+
+For the 2.4.1 NetQ release, add vagrant boxes with versioning as:
+1) 2.4.0.9
+2) 2.4.0.99
+3) 2.4.0.999
+etc...
+
+For the 2.5.0 NetQ release, add vagrant boxes with versioning as:
+1) 2.4.9
+2) 2.4.99
+3) 2.4.999
+etc...
+
 See more deets here: https://wiki.cumulusnetworks.com/display/PC/Field+Team+Workbenches
 
 Using:
 1) cd to the directory from the git clone 
-2) `vagrant up oob-mgmt-server oob-mgmt-switch`
-3) wait for that to load (its a bit messy. don't mind the red lines. it's fine)
-4) `vagrant up`
-5) wait for that to load (also messy but hey what are ya gonna do)
-6) `vagrant ssh oob-mgmt-server`
-7) Once in the oob-mgmt-server, the cldemo-evpn-symmetric demo is in the home dir. `cd cldemo-evpn-symmetric`
-8) `ansible-playbook run_demo.yml`
-9) watch `kubectl get pods` and `docker ps | head` for all of the netq containers to come up and finish loading
-10) Launch dat GUI (see wiki page above for what the links/ip/ports might be right now)
+2) `vagrant up oob-mgmt-server oob-mgmt-switch && vagrant up`
+3) wait for that to load 
+4) `vagrant ssh oob-mgmt-server`
+5) Perform master bootstrap: `netq bootstrap master interface eth0 tarball /mnt/installables/netq-bootstrap-2.4.0.tgz`
 
-Once you do all this, you are running the cldemo-evpn-symmetric demo with netq2.x. The agents are all configured and registered with the telemetry server.  In other words, that should be it. All the cards/features should light up BGP, EVPN, LLDP, CLAG
+*Can install NetQ via GUI wizard here see wiki above. CLI steps below:
+
+6) Install NetQ application `netq install standalone full interface eth0 bundle /mnt/installables/NetQ-2.4.0.tgz config-key EhVuZXRxLWVuZHBvaW50LWdhdGV3YXkYsagD`
+7) Setup EVPN Symmetric mode for some NetQ data: `cd cldemo-evpn-symmetric`
+8) `ansible-playbook run_demo.yml`
