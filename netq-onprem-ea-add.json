@@ -1,9 +1,9 @@
 {
-  "name": "cumulus/ts",
+  "name": "cumulus/ts-ea",
   "description": "NetQ OnPrem",
   "versions": [
     {
-      "version": "2.4.0",
+      "version": "2.4.0.9",
       "providers": [
         {
           "name": "libvirt",
