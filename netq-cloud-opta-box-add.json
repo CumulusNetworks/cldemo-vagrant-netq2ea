@@ -1,0 +1,15 @@
+{
+  "name": "cumulus/tscloud",
+  "description": "NetQ Cloud OPTA Base OS",
+  "versions": [
+    {
+      "version": "2.4.1",
+      "providers": [
+        {
+          "name": "libvirt",
+          "url": "file:///mnt/nvme/ubuntu-18.04-netq-2.4.1-tscloud-libvirt.box"
+        }
+      ]
+    }
+  ]
+}
