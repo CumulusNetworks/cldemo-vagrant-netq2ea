@@ -199,7 +199,7 @@ group {
   option domain-name "simulation";
   option routers 192.168.0.254;
   option www-server 192.168.0.254;
-  option default-url = "http://192.168.0.254/onie-installer";
+  option default-url = "http://192.168.0.254:7843/onie-installer";
  host oob-mgmt-switch {hardware ethernet a0:00:00:00:00:61; fixed-address 192.168.0.1; option host-name "oob-mgmt-switch"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
  host exit02 {hardware ethernet a0:00:00:00:00:42; fixed-address 192.168.0.42; option host-name "exit02"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
  host exit01 {hardware ethernet a0:00:00:00:00:41; fixed-address 192.168.0.41; option host-name "exit01"; option cumulus-provision-url "http://192.168.0.254:7843/ztp_oob.sh";  } 
