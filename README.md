@@ -25,8 +25,8 @@ Using:
 
 *After bootstrap, the NetQ may be installed via GUI/Wizard. see wiki for more details. CLI steps below:*
 
-5) Install the NetQ application: `netq install standalone full interface eth0 bundle /mnt/installables/NetQ-2.4.0.tgz config-key EhVuZXRxLWVuZHBvaW50LWdhdGV3YXkYsagD`
-6) Provision the cldemo-evpn-symmetric demo is in the home dir. `cd cldemo-evpn-symmetric`
+5) Install the NetQ application: `netq install standalone full interface eth0 bundle /mnt/installables/NetQ-2.4.0.tgz`
+6) Provision the cldemo-evpn-symmetric demo. It is cloned already. `cd cldemo-evpn-symmetric`
 7) Run the playbook `ansible-playbook run_demo.yml`
 
 Once complete, you are running the cldemo-evpn-symmetric demo with the addition of Netq2.x.
