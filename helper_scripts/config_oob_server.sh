@@ -27,11 +27,6 @@ EOT
 
 ifup eth1
 
-#temp workaround 2.4.0
-wget https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey > /dev/null 2>&1
-apt-key add cumulus-apps-deb.pubkey
-#####
-
 apt-add-repository -y ppa:ansible/ansible
 
 apt-get update
