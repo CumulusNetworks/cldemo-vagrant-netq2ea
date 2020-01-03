@@ -183,7 +183,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -443,7 +443,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -647,7 +647,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -851,7 +851,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -1027,7 +1027,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -1203,7 +1203,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -1407,7 +1407,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -1611,7 +1611,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -1815,7 +1815,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
@@ -2493,7 +2493,7 @@ end
     device.vm.box_version = "3.7.11"
 
     device.vm.provider :libvirt do |v|
-      v.memory = 768
+      v.memory = 1024
     end
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder ".", "/vagrant", disabled: true
