@@ -345,6 +345,8 @@ systemctl stop netq-agent
 systemctl disable netq-agent
 systemctl enable netq-agent@mgmt
 
+netq config restart cli
+
 systemctl stop ntp.service
 systemctl disable ntp.service
 systemctl enable ntp@mgmt
