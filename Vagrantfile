@@ -2014,7 +2014,7 @@ end
     
     device.vm.hostname = "edge01" 
     
-    device.vm.box = "generic/ubuntu1804"
+    device.vm.box = "yk0/ubuntu-xenial"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
@@ -2112,8 +2112,7 @@ end
     
     device.vm.hostname = "server01" 
     
-    device.vm.box = "generic/ubuntu1804"
-    device.vm.box_version = "1.9.18"
+    device.vm.box = "yk0/ubuntu-xenial"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
@@ -2211,8 +2210,7 @@ end
     
     device.vm.hostname = "server03" 
     
-    device.vm.box = "generic/ubuntu1804"
-    device.vm.box_version = "1.9.18"
+    device.vm.box = "yk0/ubuntu-xenial"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
@@ -2309,9 +2307,8 @@ end
   config.vm.define "server02" do |device|
     
     device.vm.hostname = "server02" 
-    device.vm.box_version = "1.9.18"
-    
-    device.vm.box = "generic/ubuntu1804"
+
+    device.vm.box = "yk0/ubuntu-xenial"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
@@ -2409,8 +2406,7 @@ end
     
     device.vm.hostname = "server04" 
     
-    device.vm.box = "generic/ubuntu1804"
-    device.vm.box_version = "1.9.18"
+    device.vm.box = "yk0/ubuntu-xenial"
 
     device.vm.provider :libvirt do |v|
       v.nic_model_type = 'e1000' 
